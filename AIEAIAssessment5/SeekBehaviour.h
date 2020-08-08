@@ -1,13 +1,14 @@
 #pragma once
 #include "Behaviour.h"
-#include <iostream>
-#include <functional>
 #include "raymath.h"
-class FleeBehaviour : public Behaviour
+
+#include <functional>
+
+class SeekBehaviour : public Behaviour
 {
 public:
-	FleeBehaviour();
-	virtual ~FleeBehaviour();
+	SeekBehaviour();
+	virtual ~SeekBehaviour();
 
 	virtual void Update(GameObject* obj, float deltaTime);
 	virtual void Draw(GameObject* obj);
@@ -20,15 +21,14 @@ public:
 
 	void SetTargetRadius(const float targetRad);
 
-	void OutOfRange(std::function <void()> callback);
+	void OnArrive(std::function <void()> callback);
 
 protected:
 
-	Vector2 m_fleeTarget;
-	float m_radiusOfTar = 100.0f;
+	Vector2 m_target;
+	float m_targetRadi = 1.0f;
 
-	std::function<void()> m_outOfRangeFunc;
-
+	std::function<void()> m_onArriveFunc;
 private:
 
 };

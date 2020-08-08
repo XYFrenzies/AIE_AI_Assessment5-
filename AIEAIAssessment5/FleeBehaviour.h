@@ -25,7 +25,7 @@ public:
 protected:
 
 	Vector2 m_fleeTarget;
-	float m_radiusOfTar = 100.0f;
+	float m_radiusOfTar = 1.0f;
 
 	std::function<void()> m_outOfRangeFunc;
 

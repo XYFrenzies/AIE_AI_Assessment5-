@@ -14,7 +14,6 @@ SeekBehaviour::~SeekBehaviour()
 void SeekBehaviour::Update(GameObject* obj, float deltaTime)
 {
 
-	//This determines the speed of the player as well.
 	float toTargetDir = Vector2Distance(obj->GetPosition(), m_target);//Movement of the agent to the direction of the desired location. 
 	if (toTargetDir < m_targetRadi)//If the Direction to the target is less than the radius of the target, then it will start to slow down.
 	{

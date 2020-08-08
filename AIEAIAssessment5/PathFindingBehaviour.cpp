@@ -1,20 +1,22 @@
-#include "SeekBehaviour.h"
+#include "PathFindingBehaviour.h"
 #include "GameObject.h"
-#include <iostream>
-SeekBehaviour::SeekBehaviour() :Behaviour() 
-{
-	m_target;
-	m_targetRadi;
-}
-
-SeekBehaviour::~SeekBehaviour()
+PathFindingBehaviour::PathFindingBehaviour() : Behaviour()
 {
 }
 
-void SeekBehaviour::Update(GameObject* obj, float deltaTime)
+PathFindingBehaviour::~PathFindingBehaviour()
 {
+}
 
-	//This determines the speed of the player as well.
+void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
+{
+	Graph2DEditor m_newPath;
+	
+	if (!m_newPath.m_path.empty())
+	{
+		m_target = m_newPath.m_path.front();
+	}
+
 	float toTargetDir = Vector2Distance(obj->GetPosition(), m_target);//Movement of the agent to the direction of the desired location. 
 	if (toTargetDir < m_targetRadi)//If the Direction to the target is less than the radius of the target, then it will start to slow down.
 	{
@@ -28,38 +30,28 @@ void SeekBehaviour::Update(GameObject* obj, float deltaTime)
 	Vector2 tarForcePos = Vector2Add(vecToTarget, obj->GetPosition());//How much force in terms of a vector should be applied to move from current position to the target location.
 	Vector2 forceDir = Vector2Subtract(tarForcePos, dirHeading);//The force direction is the subtraction of the force - the direction of the heading.
 	obj->ApplyForce(forceDir);//This is then applied to the force.
-
 }
 
-void SeekBehaviour::Draw(GameObject* obj)
+void PathFindingBehaviour::Draw(GameObject* obj)
 {
-	DrawCircle(m_target.x, m_target.y, m_targetRadi, GREEN);//Creates a larger outter circle from the target spot
-	DrawCircle(m_target.x, m_target.y, 5, BLUE);//Creates a small outta circle from the target spot
 }
 
-const Vector2& SeekBehaviour::GetTarget() const
+const Vector2& PathFindingBehaviour::GetTarget() const
 {
-	return m_target;//Gets the location
-	// TODO: insert return statement here
+	return m_target;
 }
 
-void SeekBehaviour::SetTarget(const Vector2& target)
+void PathFindingBehaviour::SetTarget(const Vector2& target)
 {
-	m_target = target;//Sets the location in relation to the variable m_target.
+	m_target = target;
 }
 
-const float SeekBehaviour::GetTargetRadius() const
+const float PathFindingBehaviour::GetTargetRadius() const
 {
 	return m_targetRadi;
-	// TODO: insert return statement here
 }
 
-void SeekBehaviour::SetTargetRadius(const float targetRad)
+void PathFindingBehaviour::SetTargetRadius(const float targetRad)
 {
 	m_targetRadi = targetRad;
-}
-
-void SeekBehaviour::OnArrive(std::function<void()> callback)
-{
-	m_onArriveFunc = callback;
 }

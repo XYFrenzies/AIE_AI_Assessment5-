@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assessment Task", "Assessme
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphs_and_FollowPath", "..\Graphs_and_FollowPath\Graphs_and_FollowPath.vcxproj", "{A67A8716-4553-43FC-B425-07B9D604CADF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIEAIAssessment5", "..\AIEAIAssessment5\AIEAIAssessment5.vcxproj", "{0689D7A7-EDD4-439A-8DAD-181BD022648F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -35,6 +37,14 @@ Global
 		{A67A8716-4553-43FC-B425-07B9D604CADF}.Release|x64.Build.0 = Release|x64
 		{A67A8716-4553-43FC-B425-07B9D604CADF}.Release|x86.ActiveCfg = Release|Win32
 		{A67A8716-4553-43FC-B425-07B9D604CADF}.Release|x86.Build.0 = Release|Win32
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Debug|x64.ActiveCfg = Debug|x64
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Debug|x64.Build.0 = Debug|x64
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Debug|x86.ActiveCfg = Debug|Win32
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Debug|x86.Build.0 = Debug|Win32
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Release|x64.ActiveCfg = Release|x64
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Release|x64.Build.0 = Release|x64
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Release|x86.ActiveCfg = Release|Win32
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +52,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{86953B2E-541B-4D8D-B3B3-4A5A0B272047} = {3539EB66-A730-490A-934D-4F147DBE2C02}
 		{A67A8716-4553-43FC-B425-07B9D604CADF} = {3539EB66-A730-490A-934D-4F147DBE2C02}
+		{0689D7A7-EDD4-439A-8DAD-181BD022648F} = {339B5FD7-3EEC-4E61-8B11-72ED8C42067F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1BB44E4-728F-44CF-83E2-C559E834232D}
