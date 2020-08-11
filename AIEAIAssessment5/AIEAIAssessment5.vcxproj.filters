@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Behaviours.cpp">
+      <UniqueIdentifier>{c5ca0788-605e-4658-bf31-698b1b445e5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behaviours.h">
+      <UniqueIdentifier>{cc443f4f-2401-4876-9bae-bcf72f78ed33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphs">
+      <UniqueIdentifier>{13d7051d-6d1e-4783-a942-df2f2e1954f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,31 +33,7 @@
     <ClCompile Include="Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Behaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyBoardBehaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SeekBehaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FleeBehaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WanderBehaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graph2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graph2DEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FollowBehaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Police.cpp">
@@ -57,8 +42,35 @@
     <ClCompile Include="MoneyBags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WanderBehaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="SeekBehaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
     <ClCompile Include="PathFindingBehaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyBoardBehaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowBehaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="FleeBehaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Behaviour.cpp">
+      <Filter>Behaviours.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapRenderer.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2DEditor.cpp">
+      <Filter>Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D.cpp">
+      <Filter>Graphs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,34 +80,7 @@
     <ClInclude Include="Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Behaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyBoardBehaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SeekBehaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FleeBehaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WanderBehaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph2DEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FollowBehaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Police.h">
@@ -104,8 +89,38 @@
     <ClInclude Include="MoneyBags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PathFindingBehaviour.h">
+    <ClInclude Include="TileMapRenderer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="FleeBehaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowBehaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyBoardBehaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingBehaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="SeekBehaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="WanderBehaviour.h">
+      <Filter>Behaviours.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D.h">
+      <Filter>Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2DEditor.h">
+      <Filter>Graphs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

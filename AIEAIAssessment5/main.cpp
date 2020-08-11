@@ -5,9 +5,6 @@
 
 int main(int argc, char* argv[])
 {
-    Application testApp;
-    testApp.TestGraph();
-
     {
         Application app; // constructor
         app.Startup();

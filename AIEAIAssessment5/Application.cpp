@@ -4,7 +4,8 @@
 #include "KeyBoardBehaviour.h"
 #include "Graph2D.h"
 #include "Graph2DEditor.h"
-
+#include "TileMap.h"
+#include "TileMapRenderer.h"
 
 Application::Application() : m_screenWidth(), m_screenHeight()
 {
@@ -40,17 +41,40 @@ void Application::Update(float dt)
 	m_robber1->Update(dt);//Updates player1 per deltatime
 	m_police1->Update(dt);
 
+	SmoothCameraFollow(m_robber1->GetPosition(), dt);
+
 }
 
 void Application::Draw()
 {
+	BeginMode2D(m_camera);
+
+	// Setting view port enables renderer
+	// to only draw tiles that are visible.
+	m_tile->GetRenderer()->SetView(view.x, view.y, view.width, view.height);
+
+	// loop through each layer - invoke draw method
+	for (int i = 0; i < m_tile->layers.size(); i++)
+	{
+		m_tile->DrawLayer(m_tile->layers[i]);
+
+		// draw player on layer 1 (underneith walls / trees)
+		if (i == 1)
+		{
+			m_robber1->Draw();
+		}
+	}
+
+	EndMode2D();
+
+
 	BeginDrawing();
 
 	ClearBackground(BLACK);//Black background
-//	m_robber1->Draw();//Draw player1
-//	m_police1->Draw();
+	m_robber1->Draw();//Draw player1
+	m_police1->Draw();
 	m_money->Draw();
-///	m_graphEditor->Draw();
+	m_graphEditor->Draw();
 	EndDrawing();
 }
 
@@ -58,6 +82,12 @@ void Application::Load()
 {
 	//Creates a variable called Keyboard1 from the keyboardbehaviour class for the first player
 	auto KeyBoard1 = new KeyBoardBehaviour();
+
+	m_tile = new TileMap();
+//	m_tile->Load("./map.tmx");
+	m_tile->SetRenderer(new TileMapRenderer());
+
+
 	//_________________________________________________________________________________________________________
 	//First Player
 	m_robber1->SetFriction(0.5f);	//Calling upon the friction of the player
@@ -106,7 +136,10 @@ void Application::Load()
 	m_graphEditor = new Graph2DEditor();
 	m_graphEditor->SetGraph(m_graph);
 
-
+	m_camera.target = { m_robber1->GetPosition().x + 20.0f, m_robber1->GetPosition().y + 20.0f };
+	m_camera.offset = { m_screenWidth / 2.0f, m_screenHeight / 2.0f };
+	m_camera.rotation = 0.0f;
+	m_camera.zoom = 1.0f;
 
 
 
@@ -125,51 +158,29 @@ void Application::Unload()
 
 	delete m_graphEditor;
 	m_graphEditor = nullptr;
+	delete m_tile;
 }
 
-void Application::TestGraph()
+void Application::SmoothCameraFollow(Vector2 targetPos, float dt)
 {
+	static float minSpeed = 30;
+	static float minEffectLength = 10;
+	static float fractionSpeed = 0.8f;
 
-	Graph<char, int> graph;
-	auto a = graph.AddNode('A');
-	auto b = graph.AddNode('B');
-	auto c = graph.AddNode('C');
-	auto d = graph.AddNode('D');
-	auto e = graph.AddNode('E');
-	auto f = graph.AddNode('F');
-	auto g = graph.AddNode('G');
-	auto h = graph.AddNode('H');
-	auto i = graph.AddNode('I');
-	graph.AddEdge(a, b, 0); graph.AddEdge(b, a, 0);     // AB
-	graph.AddEdge(a, i, 0); graph.AddEdge(i, a, 0);     // AS
-	graph.AddEdge(c, i, 0); graph.AddEdge(i, c, 0);     // SC
-	graph.AddEdge(g, i, 0); graph.AddEdge(i, g, 0);     // SG
-	graph.AddEdge(f, c, 0); graph.AddEdge(c, f, 0);     // FC
-	graph.AddEdge(f, g, 0); graph.AddEdge(g, f, 0);     // FG
-	graph.AddEdge(d, c, 0); graph.AddEdge(c, d, 0);     // CD
-	graph.AddEdge(c, e, 0); graph.AddEdge(e, c, 0);     // CE
-	graph.AddEdge(g, h, 0); graph.AddEdge(h, g, 0);     // GH
-	graph.AddEdge(e, h, 0); graph.AddEdge(h, e, 0);     // EH
-	// This is a BFS traversal.
-	// if the method returns true, the traversal will stop
-	// if the method returns false, the traversal will continue
-	//graph.ForEachBFS(nullptr, [](Graph<char, int>::Node* node) {
-	//	std::cout << node->data << std::endl;
-	//	return false;
-	//	});
-	//std::cout << "------------" << std::endl;
-	////std::cout << "------------" << std::endl;
-	//// This is a BFS traversal.
-	//// if the method returns true, the traversal will stop
-	//// if the method returns false, the traversal will continue
-	//graph.ForEachDFS(f, [](Graph<char, int>::Node* node) {
-	//	std::cout << node->data << std::endl;
-	//	return false;
-	//	});
-	//std::list<Graph2D::Node*> path; // stores the path
-	//auto isGoalNode = [this](Graph2D::Node* node) {
-	//	return node == m_endNode;
-	//};
+	m_camera.offset = { m_screenWidth / 2.0f, m_screenHeight / 2.0f };
+	Vector2 diff = Vector2Subtract(targetPos, m_camera.target);
+	float length = Vector2Length(diff);
 
+	if (length > minEffectLength)
+	{
+		float speed = fmaxf(fractionSpeed * length, minSpeed);
+		m_camera.target = Vector2Add(m_camera.target, Vector2Scale(diff, speed * dt / length));
+	}
 
+	// This logic updates the view rect
+	// based on the camera position
+	view.x = m_camera.target.x - (m_camera.offset.x * (1.0f / m_camera.zoom));
+	view.y = m_camera.target.y - (m_camera.offset.y * (1.0f / m_camera.zoom));
+	view.width = m_screenWidth * (1.0f / m_camera.zoom);
+	view.height = m_screenHeight * (1.0f / m_camera.zoom);
 }

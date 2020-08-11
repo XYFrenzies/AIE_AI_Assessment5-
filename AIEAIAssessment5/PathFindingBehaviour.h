@@ -21,17 +21,18 @@ public:
 
 	void SetTargetRadius(const float targetRad);
 
+	void AddPath(std::vector<Vector2>& path);
 
 protected:
 private:
 
-
+	Graph2DEditor m_pathFind; // stores the path
 	Vector2 m_target;
 	float m_targetRadi = 1.0f;
 
 	std::function<void()> m_onArriveFunc;
 
-
-	
+	bool pathAdded = false;
+	std::vector<Vector2> m_targetNodes;
 };
 
