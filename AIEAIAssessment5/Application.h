@@ -10,6 +10,17 @@ class Graph2D;
 class Graph2DEditor;
 class TileMap;
 
+
+enum MAP
+{
+	WALL = 0,
+	Obstacles = 1,
+	MoneyBag = 2,
+	Robber = 3,
+	Policeman = 4,
+	Ground = 5
+};
+
 class Application
 {
 public:
@@ -23,6 +34,9 @@ public:
 	
 	void Load();
 	void Unload();
+
+	Vector2 GetMousePosWorld();
+
 	void SmoothCameraFollow(Vector2 targetPos, float dt);
 
 protected:
@@ -35,7 +49,7 @@ protected:
 	Rectangle view = { 0, 0, 1440, 900 };
 
 
-	Player* m_robber1 = new Player();
+	Player* m_robber1 = nullptr;
 	Police* m_police1 = new Police();
 	MoneyBags* m_money = new MoneyBags();
 

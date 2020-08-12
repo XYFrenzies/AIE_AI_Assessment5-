@@ -12,6 +12,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphs_and_FollowPath", "..\Graphs_and_FollowPath\Graphs_and_FollowPath.vcxproj", "{A67A8716-4553-43FC-B425-07B9D604CADF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIEAIAssessment5", "..\AIEAIAssessment5\AIEAIAssessment5.vcxproj", "{0689D7A7-EDD4-439A-8DAD-181BD022648F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C02DC180-F51F-4427-BAA7-96DDB967A1B0} = {C02DC180-F51F-4427-BAA7-96DDB967A1B0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TiledTmxParser", "TiledTmxParser\TiledTmxParser.vcxproj", "{C02DC180-F51F-4427-BAA7-96DDB967A1B0}"
 EndProject

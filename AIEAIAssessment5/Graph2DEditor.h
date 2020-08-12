@@ -1,13 +1,15 @@
 #pragma once
 #include "raymath.h"
 #include "Graph2D.h"
+
+class Application;
 class Graph2D;
 
 class Graph2DEditor
 {
 public:
 
-	Graph2DEditor();
+	Graph2DEditor(Application *app);
 	~Graph2DEditor();
 
 	void Update(float deltaTime);
@@ -17,6 +19,7 @@ public:
 	void SetGraph(Graph2D* graph);
 	std::vector<Vector2> m_path; // stores the path
 protected:
+	Application* m_app = nullptr;
 
 	Graph2D* m_graph;
 	float radiusNode = 75;

@@ -2,8 +2,11 @@
 #include <iostream>
 #include "Graph2D.h"
 #include <list>
-Graph2DEditor::Graph2DEditor() : m_graph()
+#include "Application.h"
+
+Graph2DEditor::Graph2DEditor(Application *app) : m_graph()
 {
+	m_app = app;
 }
 
 Graph2DEditor::~Graph2DEditor()
@@ -15,9 +18,11 @@ void Graph2DEditor::Update(float deltaTime)
 	if (IsMouseButtonPressed(1))
 	{
 
+		auto mousePos = m_app->GetMousePosWorld();
+
 		// get the first node that we click on.
 		std::vector<Graph2D::Node*> neibouringNodes;
-		m_graph->GetNearbyNodes(GetMousePosition(), 8, neibouringNodes);
+		m_graph->GetNearbyNodes(mousePos, 8, neibouringNodes);
 		if (neibouringNodes.empty() == false)
 		{
 			if (m_startNode == nullptr)
@@ -50,7 +55,7 @@ void Graph2DEditor::Update(float deltaTime)
 
 	if (IsMouseButtonPressed(0))
 	{
-		auto mousePos = GetMousePosition();
+		auto mousePos = m_app->GetMousePosWorld();
 
 		std::vector<Graph2D::Node*> nearNodes;
 		m_graph->GetNearbyNodes(mousePos, radiusNode, nearNodes);
@@ -104,7 +109,7 @@ void Graph2DEditor::Draw()
 
 
 	//Draws a "Preview" node where the mouse is
-	auto mousePos = GetMousePosition();
+	auto mousePos = m_app->GetMousePosWorld();
 	DrawCircle(mousePos.x, mousePos.y, 6, LIGHTGRAY);
 
 	if (!m_path.empty())

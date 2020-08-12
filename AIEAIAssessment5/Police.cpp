@@ -31,11 +31,11 @@ void Police::Update(float deltaTime)
 {
 
 	//This is to check if the player is within a location of the other, it will seek towards the player.
-	//if (m_playerDetails->GetOuttaRadius() <= m_wanderBehaviour->GetRadius())
-	//{
-	//	m_seekBehaviour->SetTarget(m_playerDetails->GetPosition());
-	//	SetBehaviour(m_seekBehaviour);
-	//}
+	if (IsKeyPressed(KEY_P))
+	{
+		m_seekBehaviour->SetTarget(m_playerDetails->GetPosition());
+		SetBehaviour(m_seekBehaviour);
+	}
 }
 
 void Police::Draw()

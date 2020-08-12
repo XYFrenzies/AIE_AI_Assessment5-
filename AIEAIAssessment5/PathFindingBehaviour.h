@@ -22,13 +22,17 @@ public:
 	void SetTargetRadius(const float targetRad);
 
 	void AddPath(std::vector<Vector2>& path);
+	
+	void OnArrive(std::function<void()> callback);
 
 protected:
 private:
 
-	Graph2DEditor m_pathFind; // stores the path
+	
 	Vector2 m_target;
 	float m_targetRadi = 1.0f;
+
+	float m_constSpeed = 200;
 
 	std::function<void()> m_onArriveFunc;
 

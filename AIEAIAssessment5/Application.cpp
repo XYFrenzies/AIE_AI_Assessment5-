@@ -37,9 +37,49 @@ void Application::Run()
 
 void Application::Update(float dt)
 {
+
+
+	auto ground = m_tile->GetTileLayer("ground");//The ground of the map
+	auto barrier = m_tile->GetTileLayer("Barrier");//The barrier of the map
+	auto obstacles = m_tile->GetTileLayer("Obstacles");//The trees and terrain of the map
+
+
+
+
+
+
+	if (IsKeyDown(KEY_UP)) m_camera.zoom -= 1 * dt;
+	if (IsKeyDown(KEY_DOWN)) m_camera.zoom += 1 * dt;
 	m_graphEditor->Update(dt);
 	m_robber1->Update(dt);//Updates player1 per deltatime
 	m_police1->Update(dt);
+
+	int playerXIndex = m_robber1->GetPosition().x / m_tile->tileWidth;
+	int playerYIndex = m_robber1->GetPosition().y / m_tile->tileHeight;
+	auto cptb = barrier->GetTileData(playerXIndex, playerYIndex);
+
+	//if (cptb.globalTileId != 0)
+	//{
+	//	// the player is on a barrior tile
+	//}
+
+	if (cptb.globalTileId != 0)
+	{
+
+
+		Vector2 newVel;
+		newVel.x = GetScreenWidth() * 0.5f - m_robber1->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
+		newVel.y = GetScreenHeight() * 0.5f - m_robber1->GetPosition().y;//Sets the direction that the player is facing, towards the center via the y
+
+		newVel = Vector2Normalize(newVel);//
+		newVel = Vector2Scale(newVel, m_robber1->GetMaxSpeed());
+		m_robber1->SetVelocity(newVel);
+	}
+
+
+
+
+
 
 	SmoothCameraFollow(m_robber1->GetPosition(), dt);
 
@@ -47,10 +87,18 @@ void Application::Update(float dt)
 
 void Application::Draw()
 {
+
+
+
+	BeginDrawing();
+
+	ClearBackground(BLUE);//Black background
+
+
 	BeginMode2D(m_camera);
 
-	// Setting view port enables renderer
-	// to only draw tiles that are visible.
+	 //Setting view port enables renderer
+	 //to only draw tiles that are visible.
 	m_tile->GetRenderer()->SetView(view.x, view.y, view.width, view.height);
 
 	// loop through each layer - invoke draw method
@@ -62,39 +110,50 @@ void Application::Draw()
 		if (i == 1)
 		{
 			m_robber1->Draw();
+			m_graphEditor->Draw();
+			m_money->Draw();
 		}
 	}
 
 	EndMode2D();
 
 
-	BeginDrawing();
 
-	ClearBackground(BLACK);//Black background
-	m_robber1->Draw();//Draw player1
-	m_police1->Draw();
-	m_money->Draw();
-	m_graphEditor->Draw();
+
+	//m_robber1->Draw();//Draw player1
+	//m_police1->Draw();
+
+
 	EndDrawing();
 }
 
 void Application::Load()
 {
+	m_graph = new Graph2D();
+	m_graphEditor = new Graph2DEditor(this);
+	
 	//Creates a variable called Keyboard1 from the keyboardbehaviour class for the first player
 	auto KeyBoard1 = new KeyBoardBehaviour();
 
 	m_tile = new TileMap();
-//	m_tile->Load("./map.tmx");
+	m_tile->Load("./assets/map.tmx");
 	m_tile->SetRenderer(new TileMapRenderer());
+
+
+
 
 
 	//_________________________________________________________________________________________________________
 	//First Player
+	m_robber1 = new Player(this);
 	m_robber1->SetFriction(0.5f);	//Calling upon the friction of the player
 	m_robber1->SetPosition({ m_screenWidth * 0.25f, m_screenHeight * 0.25f });//Sets the position of the player
+	m_robber1->SetEditor(m_graphEditor);
+	
+	//_________________________________________________________________________________________________________
 	m_police1->SetFriction(0.5f);	//Calling upon the friction of the player
 	m_police1->SetPosition({ m_screenWidth * 0.75f, m_screenHeight * 0.75f });//Sets the position of the player
-	m_graph = new Graph2D();
+	m_police1->SetPlayer(m_robber1);
 
 	//How many rows and cols
 	int numRows = 4;
@@ -132,10 +191,9 @@ void Application::Load()
 		}
 	}
 
-
-	m_graphEditor = new Graph2DEditor();
 	m_graphEditor->SetGraph(m_graph);
 
+	
 	m_camera.target = { m_robber1->GetPosition().x + 20.0f, m_robber1->GetPosition().y + 20.0f };
 	m_camera.offset = { m_screenWidth / 2.0f, m_screenHeight / 2.0f };
 	m_camera.rotation = 0.0f;
@@ -183,4 +241,11 @@ void Application::SmoothCameraFollow(Vector2 targetPos, float dt)
 	view.y = m_camera.target.y - (m_camera.offset.y * (1.0f / m_camera.zoom));
 	view.width = m_screenWidth * (1.0f / m_camera.zoom);
 	view.height = m_screenHeight * (1.0f / m_camera.zoom);
+}
+
+
+Vector2 Application::GetMousePosWorld()
+{
+	auto mpos = ::GetMousePosition();
+	return GetScreenToWorld2D(mpos, m_camera);
 }

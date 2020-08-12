@@ -20,10 +20,10 @@ void SeekBehaviour::Update(GameObject* obj, float deltaTime)
 		if (m_onArriveFunc)//starts the lambda function of arriving at destination.
 			m_onArriveFunc();
 	}
-
+	float headingLen = 400;
 	Vector2 dirHeading = Vector2Add(obj->GetPosition(), obj->GetVelocity());//The direction the agent is heading in relation to the desired location.
 	Vector2 dirToTarget = Vector2Normalize(Vector2Subtract(m_target, obj->GetPosition()));//Finding a singular unit between the targets location and the current location.
-	Vector2 vecToTarget = Vector2Scale(dirToTarget, toTargetDir);//The vector distance from the agent to the location, multiplying the normalized singular point and the direction length
+	Vector2 vecToTarget = Vector2Scale(dirToTarget, headingLen);//The vector distance from the agent to the location, multiplying the normalized singular point and the direction length
 	Vector2 tarForcePos = Vector2Add(vecToTarget, obj->GetPosition());//How much force in terms of a vector should be applied to move from current position to the target location.
 	Vector2 forceDir = Vector2Subtract(tarForcePos, dirHeading);//The force direction is the subtraction of the force - the direction of the heading.
 	obj->ApplyForce(forceDir);//This is then applied to the force.

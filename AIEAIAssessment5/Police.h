@@ -15,6 +15,11 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw();
 
+	void SetPlayer(Player* player) 
+	{
+		m_playerDetails = player;
+	}
+
 protected:
 	SeekBehaviour* m_seekBehaviour;
 	WanderBehaviour* m_wanderBehaviour;
