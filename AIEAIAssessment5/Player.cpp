@@ -86,7 +86,7 @@ void Player::Update(float deltaTime)
 void Player::Draw()
 {
 
-	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (180.0f / 3.141592653589793238463f);
+	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (100.0f / 3.141592653589793238463f);
 
 	float tw = (float)m_playerTexture.width;
 	float th = (float)m_playerTexture.height;

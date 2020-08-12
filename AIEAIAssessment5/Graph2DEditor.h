@@ -15,6 +15,8 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
+	void SetNewNodeRadius(float r);
+
 	Graph2D* GetGraph();
 	void SetGraph(Graph2D* graph);
 	std::vector<Vector2> m_path; // stores the path

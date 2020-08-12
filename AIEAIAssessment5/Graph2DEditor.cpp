@@ -68,7 +68,7 @@ void Graph2DEditor::Update(float deltaTime)
 		auto newNode = m_graph->AddNode(mousePos);
 
 
-		for (auto nearbyNodes : nearNodes)
+		for (auto& nearbyNodes : nearNodes)
 		{
 			float dist = Vector2Distance(newNode->data, nearbyNodes->data);
 			m_graph->AddEdge(newNode, nearbyNodes, dist);
@@ -81,7 +81,7 @@ void Graph2DEditor::Update(float deltaTime)
 void Graph2DEditor::Draw()
 {
 	//Draw all connections
-	for (auto node : m_graph->GetNodes())
+	for (auto& node : m_graph->GetNodes())
 	{
 		for (auto connection : node->connections)
 		{
@@ -89,10 +89,11 @@ void Graph2DEditor::Draw()
 		}
 	}
 	//Draw all Nodes
-	for (auto node : m_graph->GetNodes())
+	for (auto& node : m_graph->GetNodes())
 	{
-		DrawCircle(node->data.x, node->data.y, 8, LIGHTGRAY);
-		DrawCircleLines(node->data.x, node->data.y, 8, LIGHTGRAY);
+		DrawRectangle(node->data.x - 3, node->data.y - 3, 6, 6, LIGHTGRAY);
+		// DrawCircle(node->data.x, node->data.y, 8, LIGHTGRAY);
+		// DrawCircleLines(node->data.x, node->data.y, 8, LIGHTGRAY);
 	}
 
 	//This is to draw the start and end points of when the nodes have been selected.
@@ -126,11 +127,16 @@ void Graph2DEditor::Draw()
 	std::vector<Graph2D::Node*> nearNodes;
 	m_graph->GetNearbyNodes(mousePos, radiusNode, nearNodes);
 
-	for (auto nearbyNodes : nearNodes)
+	for (auto& nearbyNodes : nearNodes)
 	{
 		DrawLine(mousePos.x, mousePos.y, nearbyNodes->data.x, nearbyNodes->data.y, LIGHTGRAY);
 	}
 
+}
+
+void Graph2DEditor::SetNewNodeRadius(float r)
+{
+	radiusNode = r;
 }
 
 Graph2D* Graph2DEditor::GetGraph()

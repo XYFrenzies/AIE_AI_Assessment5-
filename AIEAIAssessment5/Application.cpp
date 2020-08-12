@@ -46,7 +46,12 @@ void Application::Update(float dt)
 
 	if (IsKeyDown(KEY_UP)) m_camera.zoom -= 1 * dt;
 	if (IsKeyDown(KEY_DOWN)) m_camera.zoom += 1 * dt;
-	m_graphEditor->Update(dt);
+
+	if (IsKeyDown(KEY_TAB))
+	{
+		m_graphEditor->Update(dt);
+	}
+	
 	m_robber1->Update(dt);//Updates player1 per deltatime
 	m_police1->Update(dt);
 
@@ -59,8 +64,8 @@ void Application::Update(float dt)
 	{
 		//newVel.x = 0.5f - m_robber1->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
 		//newVel.y = 0.5f - m_robber1->GetPosition().y;//Sets the direction that the player is facing, towards the center via the y
-		
-		m_robber1->SetFriction(5);
+
+		m_robber1->SetFriction(1);
 		//newVel = Vector2Normalize(newVel);//
 		//newVel = Vector2Scale(newVel, 50);
 		// the player is on a barrior tile
@@ -91,9 +96,6 @@ void Application::Update(float dt)
 
 void Application::Draw()
 {
-
-	auto ground = m_tile->GetTileLayer("ground");//The ground of the map
-
 	BeginDrawing();
 
 	ClearBackground(BLUE);//Black background
@@ -101,8 +103,8 @@ void Application::Draw()
 
 	BeginMode2D(m_camera);
 
-	 //Setting view port enables renderer
-	 //to only draw tiles that are visible.
+	//Setting view port enables renderer
+	//to only draw tiles that are visible.
 	m_tile->GetRenderer()->SetView(view.x, view.y, view.width, view.height);
 
 	// loop through each layer - invoke draw method
@@ -113,16 +115,27 @@ void Application::Draw()
 		if (i == 1)
 		{
 			m_robber1->Draw();
-			m_graphEditor->Draw();
+
+			if (IsKeyDown(KEY_TAB))
+			{
+				m_graphEditor->Draw();
+			}
 			m_money->Draw();
 			m_police1->Draw();
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
 	EndMode2D();
-
-
-
 
 	//m_robber1->Draw();//Draw player1
 
@@ -144,7 +157,7 @@ void Application::Load()
 	m_tile->SetRenderer(new TileMapRenderer());
 
 
-
+	m_graphEditor->SetNewNodeRadius(m_tile->tileWidth + 5);
 
 
 	//_________________________________________________________________________________________________________
@@ -153,7 +166,7 @@ void Application::Load()
 	m_robber1->SetFriction(0.5f);	//Calling upon the friction of the player
 	m_robber1->SetPosition({ m_screenWidth * 0.25f, m_screenHeight * 0.25f });//Sets the position of the player
 	m_robber1->SetEditor(m_graphEditor);
-	
+
 	//_________________________________________________________________________________________________________
 	m_police1 = new Police(this);
 	m_police1->SetFriction(0.5f);	//Calling upon the friction of the player
@@ -161,29 +174,10 @@ void Application::Load()
 	m_police1->SetPlayer(m_robber1);
 
 
-	auto ground = m_tile->GetTileLayer("ground");//The ground of the map
-	int playerXIndex = m_robber1->GetPosition().x / m_tile->tileWidth;
-	int playerYIndex = m_robber1->GetPosition().y / m_tile->tileHeight;
-	auto cptGround = ground->GetTileData(playerXIndex, playerYIndex);
 
-	//Offset of these in the game.
-	float xOffset = 100;
-	float yOffset = 100;
-	float space = 50;//How far appart
 
-	if (cptGround.globalTileId != 0)
-	{
-		for (int y = 0; y < cptGround.yIndex; y++)
-		{
-			for (int x = 0; x < cptGround.xIndex; x++)
-			{
-				m_graph->AddNode({
-					x * space + xOffset,
-					y * space + yOffset
-					});
-			}
-		}
-	}
+
+
 
 
 	////How many rows and cols
@@ -205,18 +199,35 @@ void Application::Load()
 	//	}
 	//}
 
-	for (auto node : m_graph->GetNodes())
+	for (int y = 0; y < m_tile->rows; y++)
 	{
-		float radiusNode = 75;
+		for (int x = 0; x < m_tile->cols; x++)
+		{
+			auto layer = m_tile->GetTileLayer("ground");
+			auto& tileData = layer->GetTileData(x, y);
+			if (tileData.globalTileId != 0)
+			{
+				m_graph->AddNode({
+					x * (float)m_tile->tileWidth,
+					y * (float)m_tile->tileHeight
+				});
+			}
+			
+		}
+	}
+
+	for (auto& node : m_graph->GetNodes())
+	{
+		float radiusNode = m_tile->tileWidth + 5;
 		std::vector<Graph2D::Node*> closeNodes;
 		m_graph->GetNearbyNodes(node->data, radiusNode, closeNodes);
 
-		for (auto conNode : closeNodes)
+		for (auto& conNode : closeNodes)
 		{
 			if (conNode == node)
 				continue;
 			float dist = Vector2Distance(node->data, conNode->data);
-			
+
 			m_graph->AddEdge(node, conNode, dist);
 			m_graph->AddEdge(conNode, node, dist);
 		}
@@ -224,7 +235,7 @@ void Application::Load()
 
 	m_graphEditor->SetGraph(m_graph);
 
-	
+
 	m_camera.target = { m_robber1->GetPosition().x + 20.0f, m_robber1->GetPosition().y + 20.0f };
 	m_camera.offset = { m_screenWidth / 2.0f, m_screenHeight / 2.0f };
 	m_camera.rotation = 0.0f;
