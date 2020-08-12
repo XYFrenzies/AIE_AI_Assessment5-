@@ -27,6 +27,11 @@ void GameObject::Update(float deltaTime)
 
 	//clear the acceleration "Sets it to zero"
 	m_accel = Vector2Zero();
+
+	if (Vector2Length(m_vel) > 0) {
+		m_facingDir = Vector2Normalize(m_vel);
+	}
+
 }
 
 void GameObject::Draw()
@@ -38,8 +43,8 @@ void GameObject::Draw()
 
 
 
-	DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, GREEN);
-	DrawCircle(m_pos.x, m_pos.y, m_innerRadius, BLUE);
+	//DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, GREEN);
+	//DrawCircle(m_pos.x, m_pos.y, m_innerRadius, BLUE);
 
 
 	DrawCircle(m_pos.x, m_pos.y, 8, RED);//Creates the player
@@ -122,33 +127,3 @@ void GameObject::ApplyForce(const Vector2& force)
 {
 	m_accel = Vector2Add(m_accel, force);
 }
-//Deletes values to prevent memory leaks
-
-//These are already inbuilt from raylib but want to keep them to show what is happening in the background
-
-//Vector2 GameObject::Vector2Add(Vector2 value1, Vector2 value2)
-//{
-//	Vector2 newValue; 
-//	newValue.x = value1.x + value2.x;
-//	newValue.y = value1.y + value2.y;
-//	return newValue;
-//}
-//
-//Vector2 GameObject::Vector2Scale(Vector2 value1, float value2)
-//{
-//	Vector2 newValue;
-//	newValue.x = value1.x * value2;
-//	newValue.y = value1.y * value2;
-//	
-//
-//	return newValue;
-//}
-
-//Vector2 GameObject::Vector2Negate(Vector2 value1)
-//{
-//	Vector2 newValue;
-//	newValue.x = value1.x --;
-//	newValue.y = value1.y--;
-//
-//	return newValue;
-//}

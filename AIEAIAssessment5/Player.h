@@ -36,6 +36,8 @@ protected:
 	Application* m_app = nullptr;
 	Graph2DEditor* m_graph2DEditor = nullptr;
 
+	Texture2D m_playerTexture;
+
 private:
 };
 

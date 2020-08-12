@@ -39,13 +39,9 @@ void Application::Update(float dt)
 {
 
 
-	auto ground = m_tile->GetTileLayer("ground");//The ground of the map
+
 	auto barrier = m_tile->GetTileLayer("Barrier");//The barrier of the map
 	auto obstacles = m_tile->GetTileLayer("Obstacles");//The trees and terrain of the map
-
-
-
-
 
 
 	if (IsKeyDown(KEY_UP)) m_camera.zoom -= 1 * dt;
@@ -56,17 +52,22 @@ void Application::Update(float dt)
 
 	int playerXIndex = m_robber1->GetPosition().x / m_tile->tileWidth;
 	int playerYIndex = m_robber1->GetPosition().y / m_tile->tileHeight;
-	auto cptb = barrier->GetTileData(playerXIndex, playerYIndex);
-
-	//if (cptb.globalTileId != 0)
-	//{
-	//	// the player is on a barrior tile
-	//}
-
-	if (cptb.globalTileId != 0)
+	auto cptbar = barrier->GetTileData(playerXIndex, playerYIndex);
+	auto cptobst = obstacles->GetTileData(playerXIndex, playerYIndex);
+	m_robber1->SetFriction(0);
+	if (cptobst.globalTileId != 0)
 	{
+		//newVel.x = 0.5f - m_robber1->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
+		//newVel.y = 0.5f - m_robber1->GetPosition().y;//Sets the direction that the player is facing, towards the center via the y
+		
+		m_robber1->SetFriction(5);
+		//newVel = Vector2Normalize(newVel);//
+		//newVel = Vector2Scale(newVel, 50);
+		// the player is on a barrior tile
+	}
 
-
+	if (cptbar.globalTileId != 0)
+	{
 		Vector2 newVel;
 		newVel.x = GetScreenWidth() * 0.5f - m_robber1->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
 		newVel.y = GetScreenHeight() * 0.5f - m_robber1->GetPosition().y;//Sets the direction that the player is facing, towards the center via the y
@@ -78,7 +79,10 @@ void Application::Update(float dt)
 
 
 
-
+	//if (m_robber1->GetPosition().x == m_money->GetPosition().x && m_robber1->GetPosition().y == m_money->GetPosition().y)
+	//{
+	//	//moneyStorage.pop_back();
+	//}
 
 
 	SmoothCameraFollow(m_robber1->GetPosition(), dt);
@@ -88,7 +92,7 @@ void Application::Update(float dt)
 void Application::Draw()
 {
 
-
+	auto ground = m_tile->GetTileLayer("ground");//The ground of the map
 
 	BeginDrawing();
 
@@ -105,13 +109,13 @@ void Application::Draw()
 	for (int i = 0; i < m_tile->layers.size(); i++)
 	{
 		m_tile->DrawLayer(m_tile->layers[i]);
-
 		// draw player on layer 1 (underneith walls / trees)
 		if (i == 1)
 		{
 			m_robber1->Draw();
 			m_graphEditor->Draw();
 			m_money->Draw();
+			m_police1->Draw();
 		}
 	}
 
@@ -121,7 +125,7 @@ void Application::Draw()
 
 
 	//m_robber1->Draw();//Draw player1
-	//m_police1->Draw();
+
 
 
 	EndDrawing();
@@ -151,28 +155,55 @@ void Application::Load()
 	m_robber1->SetEditor(m_graphEditor);
 	
 	//_________________________________________________________________________________________________________
+	m_police1 = new Police(this);
 	m_police1->SetFriction(0.5f);	//Calling upon the friction of the player
 	m_police1->SetPosition({ m_screenWidth * 0.75f, m_screenHeight * 0.75f });//Sets the position of the player
 	m_police1->SetPlayer(m_robber1);
 
-	//How many rows and cols
-	int numRows = 4;
-	int numCols = 6;
+
+	auto ground = m_tile->GetTileLayer("ground");//The ground of the map
+	int playerXIndex = m_robber1->GetPosition().x / m_tile->tileWidth;
+	int playerYIndex = m_robber1->GetPosition().y / m_tile->tileHeight;
+	auto cptGround = ground->GetTileData(playerXIndex, playerYIndex);
+
 	//Offset of these in the game.
 	float xOffset = 100;
 	float yOffset = 100;
 	float space = 50;//How far appart
 
-	for (int  y = 0; y < numRows; y++)
+	if (cptGround.globalTileId != 0)
 	{
-		for (int x = 0; x < numCols; x++)
+		for (int y = 0; y < cptGround.yIndex; y++)
 		{
-			m_graph->AddNode({
-				x * space + xOffset,
-				y * space + yOffset
-				});
+			for (int x = 0; x < cptGround.xIndex; x++)
+			{
+				m_graph->AddNode({
+					x * space + xOffset,
+					y * space + yOffset
+					});
+			}
 		}
 	}
+
+
+	////How many rows and cols
+	//int numRows = 4;
+	//int numCols = 6;
+	////Offset of these in the game.
+	//float xOffset = 100;
+	//float yOffset = 100;
+	//float space = 50;//How far appart
+
+	//for (int  y = 0; y < numRows; y++)
+	//{
+	//	for (int x = 0; x < numCols; x++)
+	//	{
+	//		m_graph->AddNode({
+	//			x * space + xOffset,
+	//			y * space + yOffset
+	//			});
+	//	}
+	//}
 
 	for (auto node : m_graph->GetNodes())
 	{
@@ -248,4 +279,14 @@ Vector2 Application::GetMousePosWorld()
 {
 	auto mpos = ::GetMousePosition();
 	return GetScreenToWorld2D(mpos, m_camera);
+}
+
+Graph2D* Application::GetGraph()
+{
+	return m_graph;
+}
+
+Player* Application::GetPlayer()
+{
+	return m_robber1;
 }

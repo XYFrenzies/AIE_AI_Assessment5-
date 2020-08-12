@@ -52,6 +52,7 @@ protected:
 	Vector2 m_pos = {0, 0};//Position
 	Vector2 m_vel = {0, 0};//Velocity
 	Vector2 m_accel = {0, 0};//Acceleration
+	Vector2 m_facingDir = { 0, -1 };
 	float m_fric = 0.0f;//Friction
 
 	float m_maxSpeed = 100;

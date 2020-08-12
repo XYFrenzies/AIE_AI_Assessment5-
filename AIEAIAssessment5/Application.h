@@ -36,6 +36,8 @@ public:
 	void Unload();
 
 	Vector2 GetMousePosWorld();
+	Graph2D* GetGraph();
+	Player* GetPlayer();
 
 	void SmoothCameraFollow(Vector2 targetPos, float dt);
 
@@ -44,13 +46,16 @@ protected:
 	int m_screenHeight;
 
 
+
+
+
 	TileMap* m_tile = nullptr;
 	Camera2D m_camera = { 0 };
 	Rectangle view = { 0, 0, 1440, 900 };
 
 
 	Player* m_robber1 = nullptr;
-	Police* m_police1 = new Police();
+	Police* m_police1 = nullptr;
 	MoneyBags* m_money = new MoneyBags();
 
 	Graph2D* m_graph = nullptr;

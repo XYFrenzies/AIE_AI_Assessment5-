@@ -11,6 +11,12 @@ public:
 
 	void Draw();
 	void Update(float deltaTime);
+	//const Vector2& GetPosition() const
+	//{
+
+	//	return {randValuex, randValuey};
+	//	// TODO: insert return statement here
+	//}
 
 protected:
 private:

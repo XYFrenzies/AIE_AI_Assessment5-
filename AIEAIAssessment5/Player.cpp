@@ -37,6 +37,10 @@ Player::Player(Application* app) : GameObject()
 		});
 
 	SetBehaviour(m_kbBehaviour);//Automatically sets the behaviour to the keyboard behaviour
+
+	m_playerTexture = LoadTexture("./assets/Sprites/survivor1_stand.png");
+
+
 }
 
 Player::~Player()
@@ -46,6 +50,7 @@ Player::~Player()
 	delete m_seekBehaviour;
 	delete m_fleeBehaviour;
 	delete m_wanderBehaviour;
+	UnloadTexture(m_playerTexture);
 }
 
 void Player::Update(float deltaTime)
@@ -80,7 +85,19 @@ void Player::Update(float deltaTime)
 
 void Player::Draw()
 {
-	GameObject::Draw();
+
+	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (180.0f / 3.141592653589793238463f);
+
+	float tw = (float)m_playerTexture.width;
+	float th = (float)m_playerTexture.height;
+
+	DrawTexturePro(m_playerTexture,
+		{ 0.0f, 0.0f, (float)m_playerTexture.width, (float)m_playerTexture.height },
+		{ m_pos.x, m_pos.y, tw, th },
+		{ tw * 0.5f, th * 0.5f },
+		rot, WHITE);
+
+	DrawCircle(m_pos.x, m_pos.y, 3, WHITE);
 }
 
 void Player::SetEditor(Graph2DEditor* editor)
