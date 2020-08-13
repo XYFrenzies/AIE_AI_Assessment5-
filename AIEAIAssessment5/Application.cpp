@@ -56,24 +56,18 @@ void Application::Update(float dt)
 	
 	m_robber1->Update(dt);//Updates player1 per deltatime
 	m_police1->Update(dt);
+	m_money->Update(dt);
 
 	int playerXIndex = m_robber1->GetPosition().x / m_tile->tileWidth;
 	int playerYIndex = m_robber1->GetPosition().y / m_tile->tileHeight;
 	auto cptbar = barrier->GetTileData(playerXIndex, playerYIndex);
 	auto cptobst = obstacles->GetTileData(playerXIndex, playerYIndex);
-	m_robber1->SetFriction(0);
 	if (cptobst.globalTileId != 0)
-	{
-		//newVel.x = 0.5f - m_robber1->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
-		//newVel.y = 0.5f - m_robber1->GetPosition().y;//Sets the direction that the player is facing, towards the center via the y
+		m_robber1->SetFriction(3);
+	else
+		m_robber1->SetFriction(0);
 
-		m_robber1->SetFriction(1);
-		//newVel = Vector2Normalize(newVel);//
-		//newVel = Vector2Scale(newVel, 50);
-		// the player is on a barrior tile
-	}
-
-	if (cptbar.globalTileId != 0)
+	if (cptbar.globalTileId != 0 )
 	{
 		Vector2 newVel;
 		newVel.x = GetScreenWidth() * 0.5f - m_robber1->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
@@ -83,21 +77,22 @@ void Application::Update(float dt)
 		newVel = Vector2Scale(newVel, m_robber1->GetMaxSpeed());
 		m_robber1->SetVelocity(newVel);
 	}
-
-
-
 	//if (m_robber1->GetPosition().x == m_money->GetPosition().x && m_robber1->GetPosition().y == m_money->GetPosition().y)
 	//{
 	//	//moneyStorage.pop_back();
 	//}
-
-
 	SmoothCameraFollow(m_robber1->GetPosition(), dt);
 
 }
 
 void Application::Draw()
 {
+	auto layer = m_tile->GetTileLayer("ground");
+	auto treeLayer = m_tile->GetTileLayer("Obstacles");
+	int moneyXIndex = m_money->GetPosition().x / m_tile->tileWidth;
+	int moneyYIndey = m_money->GetPosition().y / m_tile->tileHeight;
+	auto& tileData = layer->GetTileData(moneyXIndex, moneyYIndey);
+	auto& obsticleTileData = treeLayer->GetTileData(moneyXIndex, moneyYIndey);
 	BeginDrawing();
 
 	ClearBackground(BLUE);//Black background
@@ -122,27 +117,20 @@ void Application::Draw()
 			{
 				m_graphEditor->Draw();
 			}
-			m_money->Draw();
+			if(tileData.globalTileId == 0)
+				m_money->Draw();
 			m_police1->Draw();
 		}
 	}
-
-
-
-
-
-
-
-
-
-
+	//Checks if the money has been collected.
+	if (m_money->moneyTaken == true)
+	{
+		count += 1;
+		m_money->moneyTaken = false;
+	}
+	DrawText(FormatText("Score: %i", count), 10, 10, 24, RAYWHITE);
 
 	EndMode2D();
-
-	//m_robber1->Draw();//Draw player1
-
-
-
 	EndDrawing();
 }
 
@@ -175,44 +163,28 @@ void Application::Load()
 	m_police1->SetPosition({ m_screenWidth * 0.75f, m_screenHeight * 0.75f });//Sets the position of the player
 	m_police1->SetPlayer(m_robber1);
 
+	m_money = new MoneyBags(this);
+	m_money->SetPlayer(m_robber1);
 
-
-
-
-
-
-
-	////How many rows and cols
-	//int numRows = 4;
-	//int numCols = 6;
-	////Offset of these in the game.
-	//float xOffset = 100;
-	//float yOffset = 100;
-	//float space = 50;//How far appart
-
-	//for (int  y = 0; y < numRows; y++)
-	//{
-	//	for (int x = 0; x < numCols; x++)
-	//	{
-	//		m_graph->AddNode({
-	//			x * space + xOffset,
-	//			y * space + yOffset
-	//			});
-	//	}
-	//}
 
 	for (int y = 0; y < m_tile->rows; y++)
 	{
 		for (int x = 0; x < m_tile->cols; x++)
 		{
 			auto layer = m_tile->GetTileLayer("ground");
+			auto treeLayer = m_tile->GetTileLayer("Obstacles");
+
 			auto& tileData = layer->GetTileData(x, y);
+			auto& obsticleTileData = treeLayer->GetTileData(x, y);
 			if (tileData.globalTileId != 0)
 			{
-				m_graph->AddNode({
-					x * (float)m_tile->tileWidth,
-					y * (float)m_tile->tileHeight
-				});
+				if (obsticleTileData.globalTileId == 0)
+				{
+					m_graph->AddNode({
+					x * (float)m_tile->tileWidth + (m_tile->tileWidth * 0.5f),
+					y * (float)m_tile->tileHeight + (m_tile->tileHeight * 0.5f)
+						});
+				}
 			}
 			
 		}

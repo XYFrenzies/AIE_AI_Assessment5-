@@ -1,31 +1,42 @@
 #pragma once
-#include "Player.h"
 #include "time.h"
 #include <stdlib.h>
 #include <vector>
-class MoneyBags
+#include "GameObject.h"
+class Player;
+class Application;
+
+
+class MoneyBags : public GameObject
 {
 public:
-	MoneyBags();
+	MoneyBags(Application* app);
 	~MoneyBags();
 
-	void Draw();
-	void Update(float deltaTime);
+	virtual void Draw();
+	virtual void Update(float deltaTime);
 	//const Vector2& GetPosition() const
 	//{
 
 	//	return {randValuex, randValuey};
 	//	// TODO: insert return statement here
 	//}
+	void SetPlayer(Player* player)
+	{
+		m_player = player;
+	}
 
+	bool moneyTaken = false;
 protected:
 private:
-	float radius = 8.0f;
-	Player* m_player;
 
+	Player* m_player;
+	Application* m_app = nullptr;
 	std::vector<MoneyBags*> moneyStorage;
 
-	int randValuex = rand() % 1080;//Gets a random location in the space of the maps
-	int randValuey = rand() % 720;
+	float m_time;
+	const float m_newTime = 10;
+	float radius = 8.0f;
+
 };
 

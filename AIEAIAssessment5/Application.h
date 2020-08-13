@@ -53,10 +53,10 @@ protected:
 	Camera2D m_camera = { 0 };
 	Rectangle view = { 0, 0, 1440, 900 };
 
-
+	int count = 0;
 	Player* m_robber1 = nullptr;
 	Police* m_police1 = nullptr;
-	MoneyBags* m_money = new MoneyBags();
+	MoneyBags* m_money = nullptr;
 
 	Graph2D* m_graph = nullptr;
 	Graph2DEditor* m_graphEditor = nullptr;

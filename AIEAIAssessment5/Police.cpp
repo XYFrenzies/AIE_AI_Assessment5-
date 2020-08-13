@@ -13,12 +13,12 @@ Police::Police(Application* app) : GameObject()
 	m_wanderBehaviour = new WanderBehaviour();
 	m_pFBehaviour = new PathFindingBehaviour();
 
-
+	m_pFBehaviour->SetTargetRadius(20);
 	m_wanderBehaviour->SetRadius(100);
 	m_wanderBehaviour->SetDistance(10);
 
-	m_seekBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
-		SetBehaviour(m_wanderBehaviour);//It returns to the keyboard behaviour
+	m_pFBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
+		SetBehaviour(m_wanderBehaviour);//It returns to the wanderBehaviour
 		});
 
 
@@ -39,15 +39,20 @@ Police::~Police()
 void Police::Update(float deltaTime)
 {
 	m_app->GetPlayer();
-	//This is to check if the player is within a location of the other, it will seek towards the player.
-	m_time += deltaTime;
 
-	if (m_time > 5 && m_behaviour == m_wanderBehaviour)
+
+	//If the player is within the range of the police.
+	if (m_player->GetPosition().x + m_player->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
+		&& m_player->GetPosition().x < GetPosition().x + m_player->GetOuttaRadius() + GetOuttaRadius()
+		&& m_player->GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
+		&& m_player->GetPosition().y < GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius()
+		&& m_behaviour == m_wanderBehaviour)
 	{
+
 		//This is for the nearby nodes around the police
 		std::vector<Graph2D::Node*> closeNodesPol;
 		m_app->GetGraph()->GetNearbyNodes(GetPosition(), radiusNode, closeNodesPol);
-		
+
 		//This is for the nearby nodes around the robbers
 		std::vector<Graph2D::Node*> closeNodesRob;
 		m_app->GetGraph()->GetNearbyNodes(m_app->GetPlayer()->GetPosition(), radiusNode, closeNodesRob);
@@ -68,20 +73,11 @@ void Police::Update(float deltaTime)
 			}
 			m_pFBehaviour->AddPath(newPath);
 
-			m_pFBehaviour->OnArrive([=]() {
-				m_time = 0;
-
-				m_seekBehaviour->SetTarget(m_playerDetails->GetPosition());
-				SetBehaviour(m_seekBehaviour);
-				m_seekBehaviour->OnArrive([=]() 
-					{
+			m_pFBehaviour->OnArrive([this]() {
 						SetBehaviour(m_wanderBehaviour);
-					});
 				});
 
 			SetBehaviour(m_pFBehaviour);
-
-
 		}
 	}
 	GameObject::Update(deltaTime);

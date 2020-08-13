@@ -14,12 +14,11 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 		return;
 
 	float toTargetDir = Vector2Distance(obj->GetPosition(), m_targetNodes.front());//Movement of the agent to the direction of the desired location. 
-	if (toTargetDir < m_targetRadi)//If the Direction to the target is less than the radius of the target, then it will start to slow down.
+	if (toTargetDir < m_targetRadi)//If the Direction to the target is less than the radius of the target, then it will start to slow down.																												
 	{
 		m_targetNodes.erase(m_targetNodes.begin());
 	}
-	//if (m_onArriveFunc)//starts the lambda function of arriving at destination.
-	//	m_onArriveFunc();
+
 	if (!m_targetNodes.empty())
 	{
 		float headingLen = m_constSpeed;
@@ -29,6 +28,11 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 		Vector2 tarForcePos = Vector2Add(vecToTarget, obj->GetPosition());//How much force in terms of a vector should be applied to move from current position to the target location.
 		Vector2 forceDir = Vector2Subtract(tarForcePos, dirHeading);//The force direction is the subtraction of the force - the direction of the heading.
 		obj->ApplyForce(forceDir);//This is then applied to the force.
+	}
+	else
+	{
+		if (m_onArriveFunc)//starts the lambda function of arriving at destination.
+			m_onArriveFunc();
 	}
 }
 

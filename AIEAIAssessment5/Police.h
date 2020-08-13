@@ -21,7 +21,7 @@ public:
 
 	void SetPlayer(Player* player) 
 	{
-		m_playerDetails = player;
+		m_player = player;
 	}
 
 protected:
@@ -30,11 +30,8 @@ protected:
 	Application* m_app = nullptr;
 	PathFindingBehaviour* m_pFBehaviour;
 	Texture2D m_policeTexture;
+	Player* m_player;
 
-	Player* m_playerDetails;
-	Police* m_police;
-
-	float m_time = 0;
 	float radiusNode = 75.0f;
 
 

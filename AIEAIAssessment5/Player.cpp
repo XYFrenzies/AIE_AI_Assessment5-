@@ -80,6 +80,13 @@ void Player::Update(float deltaTime)
 		m_pFBehaviour->AddPath(m_graph2DEditor->m_path);
 		SetBehaviour(m_pFBehaviour);//Returns back to the keyboard behaviour when the player presses "r"
 	}
+
+	//This will be where the flee and the pathfind will occur.
+
+
+
+
+
 	GameObject::Update(deltaTime);
 }
 
