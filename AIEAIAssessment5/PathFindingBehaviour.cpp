@@ -34,6 +34,14 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 
 void PathFindingBehaviour::Draw(GameObject* obj)
 {
+	for (int i = 1; i < m_targetNodes.size(); i++)
+	{
+		auto p1 = m_targetNodes[i];
+		auto p2 = m_targetNodes[i - 1];
+		DrawLineEx(p1, p2, 5, BLACK);
+	}
+
+
 }
 
 const Vector2& PathFindingBehaviour::GetTarget() const

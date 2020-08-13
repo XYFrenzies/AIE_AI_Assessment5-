@@ -29,6 +29,8 @@ void Application::Run()
 	while (!WindowShouldClose())//While the program has not closed
 	{
 		float dt = GetFrameTime();//Grab the delta time value
+		if (dt > 1.0f / 12.0f) dt = 1.0f / 12.0f;
+
 		Update(dt);//UYpdate per delta Time
 		Draw();
 	}
@@ -44,8 +46,8 @@ void Application::Update(float dt)
 	auto obstacles = m_tile->GetTileLayer("Obstacles");//The trees and terrain of the map
 
 
-	if (IsKeyDown(KEY_UP)) m_camera.zoom -= 1 * dt;
-	if (IsKeyDown(KEY_DOWN)) m_camera.zoom += 1 * dt;
+	if (IsKeyDown(KEY_UP) && m_camera.zoom >= 0.5) m_camera.zoom -= 1 * dt;
+	if (IsKeyDown(KEY_DOWN) && m_camera.zoom <= 10) m_camera.zoom += 1 * dt;
 
 	if (IsKeyDown(KEY_TAB))
 	{

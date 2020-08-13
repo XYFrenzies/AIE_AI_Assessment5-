@@ -30,7 +30,7 @@ private:
 
 	
 	Vector2 m_target;
-	float m_targetRadi = 1.0f;
+	float m_targetRadi = 10.0f;
 
 	float m_constSpeed = 200;
 

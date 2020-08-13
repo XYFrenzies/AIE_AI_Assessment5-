@@ -21,7 +21,7 @@ Player::Player(Application* app) : GameObject()
 	m_fleeBehaviour->SetTargetRadius(100);//Sets the radius of the circle
 	m_wanderBehaviour->SetRadius(100);//Sets the radius of the circle
 	m_wanderBehaviour->SetDistance(10);//Sets distance of agent from the circle.
-	m_pFBehaviour->SetTargetRadius(15);
+	m_pFBehaviour->SetTargetRadius(20);
 	m_seekBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
 		SetVelocity({0, 0});
 		SetBehaviour(m_kbBehaviour);//It returns to the keyboard behaviour
@@ -86,7 +86,7 @@ void Player::Update(float deltaTime)
 void Player::Draw()
 {
 
-	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (100.0f / 3.141592653589793238463f);
+	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (300.0f / 3.141592653589793238463f);
 
 	float tw = (float)m_playerTexture.width;
 	float th = (float)m_playerTexture.height;

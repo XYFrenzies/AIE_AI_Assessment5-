@@ -11,6 +11,8 @@ Police::Police(Application* app) : GameObject()
 
 	m_seekBehaviour = new SeekBehaviour();
 	m_wanderBehaviour = new WanderBehaviour();
+	m_pFBehaviour = new PathFindingBehaviour();
+
 
 	m_wanderBehaviour->SetRadius(100);
 	m_wanderBehaviour->SetDistance(10);
@@ -30,16 +32,17 @@ Police::~Police()
 	SetBehaviour(nullptr);
 	delete m_seekBehaviour;
 	delete m_wanderBehaviour;
+	delete m_pFBehaviour;
 	UnloadTexture(m_policeTexture);
 }
 
 void Police::Update(float deltaTime)
 {
-
+	m_app->GetPlayer();
 	//This is to check if the player is within a location of the other, it will seek towards the player.
-	m_time = deltaTime;
+	m_time += deltaTime;
 
-	if (m_time > 6 && m_behaviour == m_wanderBehaviour)
+	if (m_time > 5 && m_behaviour == m_wanderBehaviour)
 	{
 		//This is for the nearby nodes around the police
 		std::vector<Graph2D::Node*> closeNodesPol;
@@ -62,23 +65,25 @@ void Police::Update(float deltaTime)
 			for (auto graphPath : path)
 			{
 				newPath.push_back(graphPath->data);
-				m_pFBehaviour->AddPath(newPath);
-				m_pFBehaviour->OnArrive([=]() {
-					m_time = 0;
-					SetBehaviour(m_wanderBehaviour);
-				});
-				SetBehaviour(m_pFBehaviour);
 			}
+			m_pFBehaviour->AddPath(newPath);
+
+			m_pFBehaviour->OnArrive([=]() {
+				m_time = 0;
+
+				m_seekBehaviour->SetTarget(m_playerDetails->GetPosition());
+				SetBehaviour(m_seekBehaviour);
+				m_seekBehaviour->OnArrive([=]() 
+					{
+						SetBehaviour(m_wanderBehaviour);
+					});
+				});
+
+			SetBehaviour(m_pFBehaviour);
+
 
 		}
 	}
-
-	if (IsKeyPressed(1))
-	{
-		m_seekBehaviour->SetTarget(m_playerDetails->GetPosition());
-		SetBehaviour(m_seekBehaviour);
-	}
-
 	GameObject::Update(deltaTime);
 }
 
@@ -97,5 +102,8 @@ void Police::Draw()
 		rot, WHITE);
 
 	DrawCircle(m_pos.x, m_pos.y, 3, WHITE);
+
+
+	GameObject::Draw();
 
 }
