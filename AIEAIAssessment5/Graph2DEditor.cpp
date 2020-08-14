@@ -92,8 +92,6 @@ void Graph2DEditor::Draw()
 	for (auto& node : m_graph->GetNodes())
 	{
 		DrawRectangle(node->data.x - 3, node->data.y - 3, 6, 6, LIGHTGRAY);
-		// DrawCircle(node->data.x, node->data.y, 8, LIGHTGRAY);
-		// DrawCircleLines(node->data.x, node->data.y, 8, LIGHTGRAY);
 	}
 
 	//This is to draw the start and end points of when the nodes have been selected.

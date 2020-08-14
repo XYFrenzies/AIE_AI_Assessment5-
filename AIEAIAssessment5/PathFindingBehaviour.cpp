@@ -17,6 +17,7 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 	if (toTargetDir < m_targetRadi)//If the Direction to the target is less than the radius of the target, then it will start to slow down.																												
 	{
 		m_targetNodes.erase(m_targetNodes.begin());
+		-obj->GetVelocity().x, -obj->GetVelocity().y;
 	}
 
 	if (!m_targetNodes.empty())
@@ -38,12 +39,17 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 
 void PathFindingBehaviour::Draw(GameObject* obj)
 {
-	for (int i = 1; i < m_targetNodes.size(); i++)
+	if (IsKeyDown(KEY_TAB))
 	{
-		auto p1 = m_targetNodes[i];
-		auto p2 = m_targetNodes[i - 1];
-		DrawLineEx(p1, p2, 5, BLACK);
+		for (int i = 1; i < m_targetNodes.size(); i++)
+		{
+			auto p1 = m_targetNodes[i];
+			auto p2 = m_targetNodes[i - 1];
+			DrawLineEx(p1, p2, 5, BLACK);
+		}
 	}
+
+
 
 
 }
@@ -63,9 +69,19 @@ const float PathFindingBehaviour::GetTargetRadius() const
 	return m_targetRadi;
 }
 
+const float PathFindingBehaviour::GetConstSpeed() const
+{
+	return m_constSpeed;
+}
+
 void PathFindingBehaviour::SetTargetRadius(const float targetRad)
 {
 	m_targetRadi = targetRad;
+}
+
+void PathFindingBehaviour::SetConstSpeed(const float speed)
+{
+	m_constSpeed = speed;
 }
 
 void PathFindingBehaviour::AddPath(std::vector<Vector2>& path)

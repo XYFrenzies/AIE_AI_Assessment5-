@@ -10,6 +10,7 @@ class WanderBehaviour;
 class PathFindingBehaviour;
 class Graph2DEditor;
 class Application;
+class MoneyBags;
 
 class Player : public GameObject
 {
@@ -22,9 +23,16 @@ public:
 
 	void SetEditor(Graph2DEditor* editor);
 
+	void SetMoney(MoneyBags* moneyBag) 
+	{
+		m_money = moneyBag;
+	}
 
 
 protected:
+
+
+
 
 	KeyBoardBehaviour* m_kbBehaviour;
 	SeekBehaviour* m_seekBehaviour;
@@ -37,6 +45,12 @@ protected:
 	Graph2DEditor* m_graph2DEditor = nullptr;
 
 	Texture2D m_playerTexture;
+
+	Police* m_police;
+	MoneyBags* m_money;
+
+	bool m_fleedPrev = false;
+	bool m_isKBBehaviour = false;
 
 private:
 };

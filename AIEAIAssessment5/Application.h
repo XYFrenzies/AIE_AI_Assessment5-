@@ -5,26 +5,16 @@
 #include "Graph2D.h"
 #include "Police.h"
 #include "MoneyBags.h"
-#include <map>
 class Graph2D;
 class Graph2DEditor;
 class TileMap;
 
-
-enum MAP
-{
-	WALL = 0,
-	Obstacles = 1,
-	MoneyBag = 2,
-	Robber = 3,
-	Policeman = 4,
-	Ground = 5
-};
-
 class Application
 {
 public:
+	//Constructor
 	Application();
+	//Deconstructor
 	virtual ~Application();
 
 	void Startup();
@@ -35,33 +25,30 @@ public:
 	void Load();
 	void Unload();
 
-	Vector2 GetMousePosWorld();
-	Graph2D* GetGraph();
-	Player* GetPlayer();
-
-	void SmoothCameraFollow(Vector2 targetPos, float dt);
+	Vector2 GetMousePosWorld();//Gets the position of the mouse within the world
+	Graph2D* GetGraph();//Gets the graph information from a point in memory
+	Player* GetPlayer();//Gets the players information from a point in memory
+	MoneyBags* GetMoney();//Gets the moneys information from a point in memory
+	Police* GetPolice();//Gets the enemy's information from a point in memory
+	void SmoothCameraFollow(Vector2 targetPos, float dt);//This is the physics behind the smooth flow of the camera.
 
 protected:
+	//Gets screenwidth and height of the screen
 	int m_screenWidth;
 	int m_screenHeight;
+	int count = 0;//This is for the score which is initialized at 0
+
+	TileMap* m_tile = nullptr;//Tiles from tiled is set to nullptr
+	Camera2D m_camera = { 0 };//The camera is set to 0
+	Rectangle view = { 0, 0, 1440, 900 };//Creates a default rectangle
 
 
+	Player* m_robber = nullptr;//This is the instance of the player called robber
+	Police* m_police = nullptr;//This is the instance of the enemy called police
+	MoneyBags* m_money = nullptr;//Money is the variable that spawns in random locations, its set to nullptr
 
-
-
-	TileMap* m_tile = nullptr;
-	Camera2D m_camera = { 0 };
-	Rectangle view = { 0, 0, 1440, 900 };
-
-	int count = 0;
-	Player* m_robber1 = nullptr;
-	Police* m_police1 = nullptr;
-	MoneyBags* m_money = nullptr;
-
-	Graph2D* m_graph = nullptr;
-	Graph2DEditor* m_graphEditor = nullptr;
-	Graph2D::Node* m_startNode;
-	Graph2D::Node* m_endNode;
+	Graph2D* m_graph = nullptr;//This is the graph that uses functions within the 2D graph
+	Graph2DEditor* m_graphEditor = nullptr;//This is the editing graph.
 private:
 };
 

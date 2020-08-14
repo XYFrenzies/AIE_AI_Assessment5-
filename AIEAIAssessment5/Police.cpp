@@ -13,7 +13,8 @@ Police::Police(Application* app) : GameObject()
 	m_wanderBehaviour = new WanderBehaviour();
 	m_pFBehaviour = new PathFindingBehaviour();
 
-	m_pFBehaviour->SetTargetRadius(20);
+	m_pFBehaviour->SetTargetRadius(35);
+	m_pFBehaviour->SetConstSpeed(100);
 	m_wanderBehaviour->SetRadius(100);
 	m_wanderBehaviour->SetDistance(10);
 
@@ -38,53 +39,50 @@ Police::~Police()
 
 void Police::Update(float deltaTime)
 {
-	m_app->GetPlayer();
-
-
-	//If the player is within the range of the police.
 	if (m_player->GetPosition().x + m_player->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
 		&& m_player->GetPosition().x < GetPosition().x + m_player->GetOuttaRadius() + GetOuttaRadius()
 		&& m_player->GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
-		&& m_player->GetPosition().y < GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius()
-		&& m_behaviour == m_wanderBehaviour)
+		&& m_player->GetPosition().y < GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius())
 	{
-
-		//This is for the nearby nodes around the police
-		std::vector<Graph2D::Node*> closeNodesPol;
-		m_app->GetGraph()->GetNearbyNodes(GetPosition(), radiusNode, closeNodesPol);
-
-		//This is for the nearby nodes around the robbers
-		std::vector<Graph2D::Node*> closeNodesRob;
-		m_app->GetGraph()->GetNearbyNodes(m_app->GetPlayer()->GetPosition(), radiusNode, closeNodesRob);
-
-		//If there is a path to the player.
-		if (!closeNodesPol.empty() && !closeNodesRob.empty())
+		SetBehaviour(m_pFBehaviour);
+		m_isSeen = true;
+		if (m_pFBehaviour)
 		{
-			auto isGoalNode = [&](Graph2D::Node* node) {
-				return node == closeNodesRob[0];
-			};//Made a lambda function for the use of the pathfinding algorithm
-			std::list<Graph2D::Node*> path;
-			m_app->GetGraph()->PathFinder(closeNodesPol[0], isGoalNode, path);
+			std::vector<Graph2D::Node*> m_closeNodesRob;
+			m_app->GetGraph()->GetNearbyNodes(m_app->GetPlayer()->GetPosition(), radiusNode, m_closeNodesRob);
+			std::vector<Graph2D::Node*> m_closeNodesPol;
+			m_app->GetGraph()->GetNearbyNodes(GetPosition(), radiusNode, m_closeNodesPol);
 
-			std::vector<Vector2> newPath;
-			for (auto graphPath : path)
+			if (!m_closeNodesRob.empty() && !m_closeNodesPol.empty())
 			{
-				newPath.push_back(graphPath->data);
+				std::list<Graph2D::Node*> gNodePath;
+				m_app->GetGraph()->PathFinder(m_closeNodesRob[0], m_closeNodesPol[0], gNodePath);
+
+				std::vector<Vector2> newPath;
+				for (auto graphPath : gNodePath)
+				{
+					newPath.push_back(graphPath->data);
+				}
+				m_pFBehaviour->AddPath(newPath);
+
+				m_pFBehaviour->OnArrive([this]() {
+					SetBehaviour(m_wanderBehaviour);
+					m_isSeen = false;
+					});
 			}
-			m_pFBehaviour->AddPath(newPath);
-
-			m_pFBehaviour->OnArrive([this]() {
-						SetBehaviour(m_wanderBehaviour);
-				});
-
-			SetBehaviour(m_pFBehaviour);
 		}
+
+
+
 	}
+
 	GameObject::Update(deltaTime);
 }
 
 void Police::Draw()
 {
+	float dt = GetFrameTime();
+	m_time += dt;
 
 	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (180.0f / 3.141592653589793238463f);
 
@@ -97,9 +95,15 @@ void Police::Draw()
 		{ tw * 0.5f, th * 0.5f },
 		rot, WHITE);
 
-	DrawCircle(m_pos.x, m_pos.y, 3, WHITE);
+	if (m_isSeen == true)
+	{
+		if (m_time <= 0.5)
+			DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 255, 0, 0, 100 });
 
-
+		else if (m_time > 0.5 && m_time <= 1)
+			DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 0, 0, 255, 100 });
+		else
+			m_time = 0;
+	}
 	GameObject::Draw();
-
 }

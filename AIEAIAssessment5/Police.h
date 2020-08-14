@@ -35,6 +35,12 @@ protected:
 	float radiusNode = 75.0f;
 
 
+	float m_time = 0.0f;
+
+	bool m_isSeen = false;
+
+
+
 
 private:
 

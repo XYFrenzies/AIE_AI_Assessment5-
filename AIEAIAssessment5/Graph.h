@@ -15,6 +15,8 @@ public:
 		Node* graphNode;
 		PathFindNode* parent;
 		float gScore;
+		float hScore;
+		float fScore;
 	};
 	struct Node
 	{

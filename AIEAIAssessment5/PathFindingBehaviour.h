@@ -19,7 +19,11 @@ public:
 
 	const float GetTargetRadius() const;
 
+	const float GetConstSpeed() const;
+
 	void SetTargetRadius(const float targetRad);
+
+	void SetConstSpeed(const float speed);
 
 	void AddPath(std::vector<Vector2>& path);
 	
@@ -32,7 +36,7 @@ private:
 	Vector2 m_target;
 	float m_targetRadi = 10.0f;
 
-	float m_constSpeed = 200;
+	float m_constSpeed = 150;
 
 	std::function<void()> m_onArriveFunc;
 

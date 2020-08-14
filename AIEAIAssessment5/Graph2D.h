@@ -12,7 +12,12 @@ public:
 
 	bool PathFinder(Node* startNode, std::function<bool(Node*)>isGoalNode, std::list<Node*>& out_path);
 
+	bool PathFinder(Node* startNode, Node* endNode, std::list<Node*>& out_path);
+
 protected:
 private:
+
+
+
 };
 

@@ -36,7 +36,7 @@ void Application::Run()
 
 void Application::Update(float dt)
 {
-	m_robber1->Update(dt);//Updates player1 per deltatime
+	m_robber->Update(dt);//Updates player1 per deltatime
 	m_graphEditor->Update(dt);
 }
 
@@ -45,7 +45,7 @@ void Application::Draw()
 	BeginDrawing();
 
 	ClearBackground(BLACK);//Black background
-	m_robber1->Draw();//Draw player1
+	m_robber->Draw();//Draw player1
 	m_graphEditor->Draw();
 	EndDrawing();
 }
@@ -56,15 +56,15 @@ void Application::Load()
 	auto KeyBoard1 = new KeyBoardBehaviour();
 	//_________________________________________________________________________________________________________
 	//First Player
-	m_robber1->SetFriction(0.5f);	//Calling upon the friction of the player
-	m_robber1->SetPosition({ m_screenWidth * 0.25f, m_screenHeight * 0.25f });//Sets the position of the player
+	m_robber->SetFriction(0.5f);	//Calling upon the friction of the player
+	m_robber->SetPosition({ m_screenWidth * 0.25f, m_screenHeight * 0.25f });//Sets the position of the player
 }
 
 void Application::Unload()
 {
 	//Deletes the pointers
-	delete m_robber1;
-	m_robber1 = nullptr;
+	delete m_robber;
+	m_robber = nullptr;
 	delete m_graph;
 	m_graph = nullptr;
 

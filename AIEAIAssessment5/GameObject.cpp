@@ -41,15 +41,15 @@ void GameObject::Draw()
 
 	Vector2 lineDir = Vector2Add(m_pos, m_vel);//Draws a directional line for the player
 
+	if (IsKeyDown(KEY_TAB))
+	{
+		DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 0, 255, 0, 100 });
+		DrawCircle(m_pos.x, m_pos.y, m_innerRadius, { 100, 255, 100, 100 });
+		DrawCircle(m_pos.x, m_pos.y, 8, RED);//Creates the player
 
+		DrawLine(m_pos.x, m_pos.y, lineDir.x, lineDir.y, RED); //Creates the line
+	}
 
-	//DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, GREEN);
-	//DrawCircle(m_pos.x, m_pos.y, m_innerRadius, BLUE);
-
-
-	DrawCircle(m_pos.x, m_pos.y, 8, RED);//Creates the player
-
-	DrawLine(m_pos.x, m_pos.y, lineDir.x, lineDir.y, RED); //Creates the line
 }
 //Gets the position of the player
 const Vector2& GameObject::GetPosition() const

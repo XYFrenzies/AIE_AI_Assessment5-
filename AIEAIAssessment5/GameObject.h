@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "Behaviour.h"
+#include "Graph2D.h"
 
 class Behaviour;
 class GameObject
@@ -42,6 +43,9 @@ public:
 
 	void Unload();
 
+
+
+
 	//This is already in the raylib math libraries
 	//Vector2 Vector2Add(Vector2 value1, Vector2 value2);
 
@@ -56,12 +60,12 @@ protected:
 	float m_fric = 0.0f;//Friction
 
 	float m_maxSpeed = 100;
-
-
-	float m_innerRadius = 40;
+	float m_innerRadius = 35;
 	float m_outtaRadius = 100;
 
 	Behaviour* m_behaviour;
+
+	std::vector<Graph2D::Node*> m_nearbyNodes;
 private:
 
 };
