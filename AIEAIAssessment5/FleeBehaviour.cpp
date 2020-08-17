@@ -17,7 +17,7 @@ void FleeBehaviour::Update(GameObject* obj, float deltaTime)
 	float distance = Vector2Distance(obj->GetPosition(), m_fleeTarget);//The integer distance is of the position and the fleeing target
 	if (distance > m_radiusOfTar)//If the distance is larger than the radius, the velocity will decrease and the lamder function will occur
 	{
-		-obj->GetVelocity().x, -obj->GetVelocity().y;
+		-obj->GetVelocity().x, -obj->GetVelocity().y;//Lessens the velocity over time.
 		if (m_outOfRangeFunc)
 			m_outOfRangeFunc;
 	}

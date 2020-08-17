@@ -13,11 +13,13 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 	if (pathAdded == false || m_targetNodes.empty())
 		return;
 
+	obj->SetFriction(0);
 	float toTargetDir = Vector2Distance(obj->GetPosition(), m_targetNodes.front());//Movement of the agent to the direction of the desired location. 
 	if (toTargetDir < m_targetRadi)//If the Direction to the target is less than the radius of the target, then it will start to slow down.																												
 	{
 		m_targetNodes.erase(m_targetNodes.begin());
 		-obj->GetVelocity().x, -obj->GetVelocity().y;
+		obj->SetFriction(1);
 	}
 
 	if (!m_targetNodes.empty())

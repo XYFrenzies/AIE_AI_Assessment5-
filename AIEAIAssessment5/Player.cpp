@@ -22,7 +22,7 @@ Player::Player(Application* app) : GameObject()
 	m_fleeBehaviour->SetTargetRadius(100);//Sets the radius of the circle
 	m_wanderBehaviour->SetRadius(100);//Sets the radius of the circle
 	m_wanderBehaviour->SetDistance(10);//Sets distance of agent from the circle.
-	m_pFBehaviour->SetTargetRadius(m_innerRadius);
+	m_pFBehaviour->SetTargetRadius(30);
 	m_seekBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
 		SetVelocity({ 0, 0 });
 		SetBehaviour(m_kbBehaviour);//It returns to the keyboard behaviour
@@ -70,9 +70,9 @@ void Player::Update(float deltaTime)
 		m_isKBBehaviour = false;
 	}
 	//If the moneybag has spawned on the map.
-	if (((m_behaviour == m_wanderBehaviour && !m_app->GetMoney()->moneyStorage.empty()) 
+	if (((m_behaviour == m_wanderBehaviour && !m_app->GetMoney()->drawnStorage.empty())
 		|| (m_behaviour == m_pFBehaviour && m_fleedPrev == true) || 
-		(!m_app->GetMoney()->moneyStorage.empty() && m_behaviour != m_pFBehaviour)) && m_isKBBehaviour == false)
+		(!m_app->GetMoney()->drawnStorage.empty() && m_behaviour != m_pFBehaviour)) && m_isKBBehaviour == false)
 	{
 		m_fleedPrev = false;
 		//This is for the nearby nodes around the player
@@ -81,7 +81,7 @@ void Player::Update(float deltaTime)
 
 		//This is for the nearby nodes around the moneyBag
 		std::vector<Graph2D::Node*> closeNodesMon;
-		m_app->GetGraph()->GetNearbyNodes(m_app->GetMoney()->moneyStorage.back()->GetPosition(), m_app->GetMoney()->moneyStorage.back()->GetInnerRadius(), closeNodesMon);
+		m_app->GetGraph()->GetNearbyNodes(m_app->GetMoney()->drawnStorage.back()->coord, m_app->GetMoney()->drawnStorage.back()->radius, closeNodesMon);
 
 		//If there is a path to the player.
 		if (!closeNodesRob.empty() && !closeNodesMon.empty())
@@ -106,7 +106,30 @@ void Player::Update(float deltaTime)
 			SetBehaviour(m_pFBehaviour);
 		}
 	}
+	//else if (m_police != nullptr)
+	//{
+	//	if (m_police->GetPosition().x + m_police->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
+	//	&& m_police->GetPosition().x < GetPosition().x + m_police->GetOuttaRadius() + GetOuttaRadius()
+	//	&& m_police->GetPosition().y + m_police->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
+	//	&& m_police->GetPosition().y < GetPosition().y + m_police->GetOuttaRadius() + GetOuttaRadius())
+	//{
+	//	if (m_behaviour == m_pFBehaviour)
+	//	{
+	//		SetBehaviour(m_fleeBehaviour);
+	//		m_fleeBehaviour->OutOfRange([this]() {
+	//			SetBehaviour(m_pFBehaviour);
+	//			});
+	//	}
+	//	else if (m_behaviour == m_wanderBehaviour)
+	//	{
+	//		SetBehaviour(m_fleeBehaviour);
+	//		m_fleeBehaviour->OutOfRange([this]() {
+	//			SetBehaviour(m_wanderBehaviour);
+	//			});
+	//	}
+	//}
 
+	//}
 
 	GameObject::Update(deltaTime);
 }
@@ -114,18 +137,18 @@ void Player::Update(float deltaTime)
 void Player::Draw()
 {
 
-	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (150.0f / 3.141592653589793238463f);
+	float rot = atan2f(m_facingDir.y, m_facingDir.x) * (150.0f / 3.141592653589793238463f);//This is for the roation of the player
 
-	float tw = (float)m_playerTexture.width;
-	float th = (float)m_playerTexture.height;
+	float tw = (float)m_playerTexture.width;//Tile width
+	float th = (float)m_playerTexture.height;//Tileheight
 
 	DrawTexturePro(m_playerTexture,
 		{ 0.0f, 0.0f, (float)m_playerTexture.width, (float)m_playerTexture.height },
 		{ m_pos.x, m_pos.y, tw, th },
 		{ tw * 0.5f, th * 0.5f },
-		rot, WHITE);
+		rot, WHITE);//
 
-	GameObject::Draw();
+	GameObject::Draw();//Draws the gameobject
 }
 
 void Player::SetEditor(Graph2DEditor* editor)

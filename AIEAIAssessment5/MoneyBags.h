@@ -6,6 +6,14 @@
 class Player;
 class Application;
 
+struct Money
+{
+	int value;
+	Vector2 coord;
+	float radius = 35;
+};
+
+
 
 class MoneyBags : public GameObject
 {
@@ -22,12 +30,20 @@ public:
 	{
 		m_player = player;
 	}
+	Money* HoldMoneyBags(float x, float y);
+	std::vector<Money> ReturnMoneyBags(float x, float y);
 
 	bool moneyTaken = false;//public variable to find the money taken
-	std::vector<MoneyBags*> moneyStorage;//Storage of moneybags
+	bool newMoney = false;
+	std::vector<Money*> moneyStorage;//Storage of moneybags
+	std::vector<Money*> drawnStorage;
 protected:
 private:
 	
+	float xCoord;
+	float yCoord;
+
+
 	Player* m_player;//the instance of a player
 	Application* m_app = nullptr;//The application is set to nullptr
 

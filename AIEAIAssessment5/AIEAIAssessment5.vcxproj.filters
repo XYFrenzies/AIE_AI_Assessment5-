@@ -54,9 +54,6 @@
     <ClCompile Include="KeyBoardBehaviour.cpp">
       <Filter>Behaviours.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="FollowBehaviour.cpp">
-      <Filter>Behaviours.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="FleeBehaviour.cpp">
       <Filter>Behaviours.cpp</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
       <Filter>Behaviours.h</Filter>
     </ClInclude>
     <ClInclude Include="FleeBehaviour.h">
-      <Filter>Behaviours.h</Filter>
-    </ClInclude>
-    <ClInclude Include="FollowBehaviour.h">
       <Filter>Behaviours.h</Filter>
     </ClInclude>
     <ClInclude Include="KeyBoardBehaviour.h">

@@ -171,7 +171,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="FleeBehaviour.cpp" />
-    <ClCompile Include="FollowBehaviour.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graph2D.cpp" />
     <ClCompile Include="Graph2DEditor.cpp" />
@@ -188,7 +187,6 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="FleeBehaviour.h" />
-    <ClInclude Include="FollowBehaviour.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Graph.h" />

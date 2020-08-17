@@ -18,9 +18,9 @@ Police::Police(Application* app) : GameObject()
 	m_wanderBehaviour->SetRadius(100);
 	m_wanderBehaviour->SetDistance(10);
 
-	m_pFBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
-		SetBehaviour(m_wanderBehaviour);//It returns to the wanderBehaviour
-		});
+	//m_pFBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
+	//	//SetBehaviour(m_wanderBehaviour);//It returns to the wanderBehaviour
+	//	});
 
 
 	SetBehaviour(m_wanderBehaviour);
@@ -71,11 +71,7 @@ void Police::Update(float deltaTime)
 					});
 			}
 		}
-
-
-
 	}
-
 	GameObject::Update(deltaTime);
 }
 

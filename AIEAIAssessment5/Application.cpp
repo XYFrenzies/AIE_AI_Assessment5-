@@ -50,7 +50,7 @@ void Application::Update(float dt)
 	{
 		m_graphEditor->Update(dt);
 	}
-	
+
 	m_robber->Update(dt);//Updates player1 per deltatime
 	m_police->Update(dt);
 	m_money->Update(dt);
@@ -64,7 +64,7 @@ void Application::Update(float dt)
 	else
 		m_robber->SetFriction(0);
 
-	if (cptbar.globalTileId != 0 )
+	if (cptbar.globalTileId != 0)
 	{
 		Vector2 newVel;
 		newVel.x = GetScreenWidth() * 0.5f - m_robber->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
@@ -117,27 +117,7 @@ void Application::Draw()
 				m_graphEditor->Draw();
 			}
 
-
-			//Turn this into a function.
-			for (int y = 0; y < m_tile->rows; y++)
-			{
-				for (int x = 0; x < m_tile->cols; x++)
-				{
-					auto layer = m_tile->GetTileLayer("ground");
-					auto treeLayer = m_tile->GetTileLayer("Obstacles");
-
-					auto& tileData = layer->GetTileData(x, y);
-					auto& obsticleTileData = treeLayer->GetTileData(x, y);
-					if (tileData.globalTileId != 0)
-					{
-						if (obsticleTileData.globalTileId == 0)
-						{
-							m_money->Draw();
-						}
-					}
-
-				}
-			}
+			m_money->Draw();
 			m_police->Draw();
 		}
 	}
@@ -149,6 +129,7 @@ void Application::Draw()
 	}
 
 
+
 	EndMode2D();
 	DrawText(FormatText("Score: %i", count), 10, 10, 24, RAYWHITE);
 	EndDrawing();
@@ -158,7 +139,7 @@ void Application::Load()
 {
 	m_graph = new Graph2D();
 	m_graphEditor = new Graph2DEditor(this);
-	
+
 	//Creates a variable called Keyboard1 from the keyboardbehaviour class for the first player
 	auto KeyBoard1 = new KeyBoardBehaviour();
 
@@ -205,13 +186,15 @@ void Application::Load()
 					x * (float)m_tile->tileWidth + (m_tile->tileWidth * 0.5f),
 					y * (float)m_tile->tileHeight + (m_tile->tileHeight * 0.5f)
 						});
-
+					m_money->HoldMoneyBags(
+						x * (float)m_tile->tileWidth + (m_tile->tileWidth * 0.5f),
+						y * (float)m_tile->tileHeight + (m_tile->tileHeight * 0.5f)
+					);
 				}
 			}
-			
+
 		}
 	}
-
 	for (auto& node : m_graph->GetNodes())
 	{
 		float radiusNode = m_tile->tileWidth + 5;
@@ -236,8 +219,6 @@ void Application::Load()
 	m_camera.offset = { m_screenWidth / 2.0f, m_screenHeight / 2.0f };
 	m_camera.rotation = 0.0f;
 	m_camera.zoom = 1.0f;
-
-
 
 }
 
@@ -286,7 +267,6 @@ void Application::SmoothCameraFollow(Vector2 targetPos, float dt)
 	view.width = m_screenWidth * (1.0f / m_camera.zoom);
 	view.height = m_screenHeight * (1.0f / m_camera.zoom);
 }
-
 
 Vector2 Application::GetMousePosWorld()
 {
