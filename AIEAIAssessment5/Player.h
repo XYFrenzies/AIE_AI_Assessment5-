@@ -4,53 +4,45 @@
 
 class Police;
 class KeyBoardBehaviour;
-class SeekBehaviour;
 class FleeBehaviour;
 class WanderBehaviour;
 class PathFindingBehaviour;
 class Graph2DEditor;
 class Application;
-class MoneyBags;
+class Item;
 
 class Player : public GameObject
 {
 public:
-	Player(Application *app);
-	~Player();
+	Player(Application *app);//Constructor
+	~Player();//Deconstructor
 
 	virtual void Update(float deltaTime);
 	virtual void Draw();
-
+	//Sets the editor.
 	void SetEditor(Graph2DEditor* editor);
-
-	void SetMoney(MoneyBags* moneyBag) 
+	//Sets the item money.
+	void SetMoney(Item* items) 
 	{
-		m_money = moneyBag;
+		m_item = items;
 	}
 
 
 protected:
+	KeyBoardBehaviour* m_kbBehaviour;//Keyboard behaviuour
+	FleeBehaviour* m_fleeBehaviour;//flee behaviuour
+	WanderBehaviour* m_wanderBehaviour;//wander behaviuour
 
+	PathFindingBehaviour* m_pFBehaviour;//pathfinding behaviuour
 
+	Application* m_app = nullptr;//application
+	Graph2DEditor* m_graph2DEditor = nullptr;//graph2Deditor for the setting of the editor
 
+	Texture2D m_playerTexture;//Creates the player texture
+	Item* m_item;//creates the instance of an item in memory
 
-	KeyBoardBehaviour* m_kbBehaviour;
-	SeekBehaviour* m_seekBehaviour;
-	FleeBehaviour* m_fleeBehaviour;
-	WanderBehaviour* m_wanderBehaviour;
-
-	PathFindingBehaviour* m_pFBehaviour;
-
-	Application* m_app = nullptr;
-	Graph2DEditor* m_graph2DEditor = nullptr;
-
-	Texture2D m_playerTexture;
-
-	Police* m_police;
-	MoneyBags* m_money;
-
-	bool m_fleedPrev = false;
-	bool m_isKBBehaviour = false;
+	bool m_fleedPrev = false;//Checks if the player is fleeing
+	bool m_isKBBehaviour = false;//Checks if the player is in keyboard.
 
 private:
 };

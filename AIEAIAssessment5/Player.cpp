@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "KeyBoardBehaviour.h"
-#include "SeekBehaviour.h"
 #include "FleeBehaviour.h"
 #include "WanderBehaviour.h"
 #include "PathFindingBehaviour.h"
@@ -14,41 +13,26 @@ Player::Player(Application* app) : GameObject()
 	m_app = app;
 
 	m_kbBehaviour = new KeyBoardBehaviour();//Creates an instance in memory of the Keyboard behaviour 
-	m_seekBehaviour = new SeekBehaviour();//Creates an instance in memory of the seek behaviour 
-	m_fleeBehaviour = new FleeBehaviour();
-	m_wanderBehaviour = new WanderBehaviour();
-	m_pFBehaviour = new PathFindingBehaviour();
-	m_seekBehaviour->SetTargetRadius(100);//Sets the radius of the circle
-	m_fleeBehaviour->SetTargetRadius(100);//Sets the radius of the circle
+	m_fleeBehaviour = new FleeBehaviour();//Creates an instance in memory of the flee behaviour 
+	m_wanderBehaviour = new WanderBehaviour();//Creates an instance in memory of the wander behaviour 
+	m_pFBehaviour = new PathFindingBehaviour();//Creates an instance in memory of the pathfind behaviour 
+	m_fleeBehaviour->SetTargetRadius(10);//Sets the radius of the circle
 	m_wanderBehaviour->SetRadius(100);//Sets the radius of the circle
 	m_wanderBehaviour->SetDistance(10);//Sets distance of agent from the circle.
-	m_pFBehaviour->SetTargetRadius(30);
-	m_seekBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
-		SetVelocity({ 0, 0 });
-		SetBehaviour(m_kbBehaviour);//It returns to the keyboard behaviour
-		});
-	m_fleeBehaviour->OutOfRange([this]() {
-		SetBehaviour(m_wanderBehaviour);
-		});
-	m_wanderBehaviour->ChangeMode([this]() {
-		SetBehaviour(m_kbBehaviour);
-		});
-	m_pFBehaviour->OnArrive([this]() {//When the player left clicks and the agent arrives to the destination
-		SetBehaviour(m_wanderBehaviour);//It returns to the keyboard behaviour
-		});
+	m_pFBehaviour->SetTargetRadius(m_innerRadius);
 
 	SetBehaviour(m_wanderBehaviour);//Automatically sets the behaviour to the keyboard behaviour
 
 	m_playerTexture = LoadTexture("./assets/Sprites/survivor1_stand.png");
-
+	m_item = m_app->GetItem();
 
 }
 
 Player::~Player()
 {
+	//Deleting the behaviours that the player has.
 	SetBehaviour(nullptr);
 	delete m_kbBehaviour;
-	delete m_seekBehaviour;
 	delete m_fleeBehaviour;
 	delete m_wanderBehaviour;
 	UnloadTexture(m_playerTexture);
@@ -64,15 +48,17 @@ void Player::Update(float deltaTime)
 		SetBehaviour(m_kbBehaviour);//Returns back to the keyboard behaviour when the player presses "r"
 		m_isKBBehaviour = true;
 	}
-	if(IsKeyDown(KEY_Q) && m_behaviour == m_kbBehaviour)
+	if (IsKeyDown(KEY_Q) && m_behaviour == m_kbBehaviour)
 	{
 		SetBehaviour(m_wanderBehaviour);//Returns back to the keyboard behaviour when the player presses "r"
 		m_isKBBehaviour = false;
 	}
+
+
 	//If the moneybag has spawned on the map.
-	if (((m_behaviour == m_wanderBehaviour && !m_app->GetMoney()->drawnStorage.empty())
-		|| (m_behaviour == m_pFBehaviour && m_fleedPrev == true) || 
-		(!m_app->GetMoney()->drawnStorage.empty() && m_behaviour != m_pFBehaviour)) && m_isKBBehaviour == false)
+	if (((m_behaviour == m_wanderBehaviour && !m_app->GetItem()->drawnStorage.empty())
+		|| (m_behaviour == m_pFBehaviour && m_fleedPrev == true) ||
+		(!m_app->GetItem()->drawnStorage.empty() && m_behaviour != m_pFBehaviour)) && m_isKBBehaviour == false)
 	{
 		m_fleedPrev = false;
 		//This is for the nearby nodes around the player
@@ -81,7 +67,7 @@ void Player::Update(float deltaTime)
 
 		//This is for the nearby nodes around the moneyBag
 		std::vector<Graph2D::Node*> closeNodesMon;
-		m_app->GetGraph()->GetNearbyNodes(m_app->GetMoney()->drawnStorage.back()->coord, m_app->GetMoney()->drawnStorage.back()->radius, closeNodesMon);
+		m_app->GetGraph()->GetNearbyNodes(m_app->GetItem()->drawnStorage.back()->coord, m_app->GetItem()->drawnStorage.back()->radius, closeNodesMon);
 
 		//If there is a path to the player.
 		if (!closeNodesRob.empty() && !closeNodesMon.empty())
@@ -106,28 +92,30 @@ void Player::Update(float deltaTime)
 			SetBehaviour(m_pFBehaviour);
 		}
 	}
-	//else if (m_police != nullptr)
+	//if (m_app->GetPolice() != nullptr)
 	//{
-	//	if (m_police->GetPosition().x + m_police->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
-	//	&& m_police->GetPosition().x < GetPosition().x + m_police->GetOuttaRadius() + GetOuttaRadius()
-	//	&& m_police->GetPosition().y + m_police->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
-	//	&& m_police->GetPosition().y < GetPosition().y + m_police->GetOuttaRadius() + GetOuttaRadius())
-	//{
-	//	if (m_behaviour == m_pFBehaviour)
+	//	if (m_app->GetPolice()->GetPosition().x + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
+	//		&& m_app->GetPolice()->GetPosition().x < GetPosition().x + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius()
+	//		&& m_app->GetPolice()->GetPosition().y + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
+	//		&& m_app->GetPolice()->GetPosition().y < GetPosition().y + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius())
 	//	{
-	//		SetBehaviour(m_fleeBehaviour);
-	//		m_fleeBehaviour->OutOfRange([this]() {
-	//			SetBehaviour(m_pFBehaviour);
-	//			});
+	//		m_fleeBehaviour->SetTarget(m_app->GetPolice()->GetPosition());
+	//		m_fleeBehaviour->SetTargetRadius(m_app->GetPolice()->GetOuttaRadius());
+	//		if (m_behaviour == m_pFBehaviour)
+	//		{
+	//			SetBehaviour(m_fleeBehaviour);
+	//			m_fleeBehaviour->OutOfRange([this]() {
+	//				SetBehaviour(m_pFBehaviour);
+	//				});
+	//		}
+	//		else if (m_behaviour == m_wanderBehaviour)
+	//		{
+	//			SetBehaviour(m_fleeBehaviour);
+	//			m_fleeBehaviour->OutOfRange([this]() {
+	//				SetBehaviour(m_wanderBehaviour);
+	//				});
+	//		}
 	//	}
-	//	else if (m_behaviour == m_wanderBehaviour)
-	//	{
-	//		SetBehaviour(m_fleeBehaviour);
-	//		m_fleeBehaviour->OutOfRange([this]() {
-	//			SetBehaviour(m_wanderBehaviour);
-	//			});
-	//	}
-	//}
 
 	//}
 

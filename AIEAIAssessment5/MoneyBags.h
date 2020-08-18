@@ -1,5 +1,4 @@
 #pragma once
-#include "time.h"
 #include <stdlib.h>
 #include <vector>
 #include "GameObject.h"
@@ -12,16 +11,13 @@ struct Money
 	Vector2 coord;
 	float radius = 35;
 };
-
-
-
-class MoneyBags : public GameObject
+class Item : public GameObject
 {
 public:
 	//Constructor
-	MoneyBags(Application* app);
+	Item(Application* app);
 	//Deconstructor
-	~MoneyBags();
+	~Item();
 	
 	virtual void Draw();
 	virtual void Update(float deltaTime);
@@ -30,8 +26,7 @@ public:
 	{
 		m_player = player;
 	}
-	Money* HoldMoneyBags(float x, float y);
-	std::vector<Money> ReturnMoneyBags(float x, float y);
+	Money* HoldItemPos(float x, float y);//This is to hold all the available spots for the money to spawn
 
 	bool moneyTaken = false;//public variable to find the money taken
 	bool newMoney = false;
@@ -39,18 +34,14 @@ public:
 	std::vector<Money*> drawnStorage;
 protected:
 private:
-	
-	float xCoord;
-	float yCoord;
-
-
 	Player* m_player;//the instance of a player
 	Application* m_app = nullptr;//The application is set to nullptr
 
-	Texture2D m_moneyBagTex;
+	Texture2D m_coinTex;
 	float m_time;
 	const float m_newTime = 10;
 	float radius = 8.0f;
+
 
 };
 

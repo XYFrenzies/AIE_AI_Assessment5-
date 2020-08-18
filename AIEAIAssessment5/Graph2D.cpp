@@ -10,7 +10,7 @@ Graph2D::~Graph2D()
 
 void Graph2D::GetNearbyNodes(Vector2 position, float radius, std::vector<Graph2D::Node*>& out_nodes)
 {
-	out_nodes.clear();
+	out_nodes.clear();//This is to delete the nodes so that it can be updated properly per frame in the police gameobject.
 	for (auto node : m_nodes)
 	{
 		float dist = Vector2Distance(position, node->data);
@@ -48,48 +48,44 @@ bool Graph2D::PathFinder(Node* startNode, std::function<bool(Node*)>isGoalNode, 
 
 	while (!stack.empty())
 	{
+		PathFindNode* currentNode = stack.back();//Sets the current node to the last in the stack
 
+		stack.pop_back();//Pops that last node off the stack
+		visited.push_back(currentNode);//pushes that popped off node or the currentNode to the visited list.
 
-		PathFindNode* currentNode = stack.back();
-
-		stack.pop_back();
-		visited.push_back(currentNode);
-
-		if (isGoalNode(currentNode->graphNode))
+		if (isGoalNode(currentNode->graphNode))//If the currentNode is the goalNode (Where the location of the path needs to go)
 		{
 			PathFindNode* current = currentNode;
-			while (current != nullptr)
+			while (current != nullptr)//This will loop through the entire path
 			{
 				out_path.push_front(current->graphNode);
 				current = current->parent;
 			}
 			return true;
 		}
-		for (Edge& edges : currentNode->graphNode->connections)
+		for (Edge& edges : currentNode->graphNode->connections)//Loops through every edge
 		{
-
-			auto pathFindNode = IfNodesExist(edges.to);
-
+			auto pathFindNode = IfNodesExist(edges.to);//Creates a pathNode
+			//If the path to find is nullptr
 			if (pathFindNode == nullptr)
 			{
-				PathFindNode* pathFindNode = new PathFindNode();
-				pathFindNode->gScore = currentNode->gScore + edges.data;
-				pathFindNode->parent = currentNode;
-				pathFindNode->graphNode = edges.to;
-				stack.push_back(pathFindNode);
+				PathFindNode* pathFindNode = new PathFindNode();//Creates an instance of the path in memory
+				pathFindNode->gScore = currentNode->gScore + edges.data;//The gScore of the node is equal to the currentNodes gScore + the data of the edge
+				pathFindNode->parent = currentNode;//The parent is then set ot currentNode
+				pathFindNode->graphNode = edges.to;//The graphNode is equal to the edges
+				stack.push_back(pathFindNode);//Pushes the new pathfindNode to the end of the stack
 
 			}
-			else
+			else//If the pathfindNode is not nullptr
 			{
-				if (pathFindNode->gScore > currentNode->gScore + edges.data)
+				if (pathFindNode->gScore > currentNode->gScore + edges.data)//If the gScore is larger than the currentNode's gScore
 				{
-					pathFindNode->parent = currentNode;
-					pathFindNode->gScore = currentNode->gScore + edges.data;
+					pathFindNode->parent = currentNode;//The parent is not the currentNode
+					pathFindNode->gScore = currentNode->gScore + edges.data;//The gScore is now
 				}
 			}
 		}
 		//Sort the stack by the g.score
-
 		stack.sort([](PathFindNode* a, PathFindNode* b)
 			{
 				return a->gScore > b->gScore;

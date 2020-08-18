@@ -14,10 +14,11 @@ FleeBehaviour::~FleeBehaviour()
 void FleeBehaviour::Update(GameObject* obj, float deltaTime)
 {
 	Vector2 vecOfDestPos = Vector2Subtract(obj->GetPosition(), m_fleeTarget);//Gets the vector distance of the objects position to the fleeing target location
-	float distance = Vector2Distance(obj->GetPosition(), m_fleeTarget);//The integer distance is of the position and the fleeing target
+	float distance = Vector2Distance({ obj->GetPosition().x + obj->GetOuttaRadius(), obj->GetPosition().y + obj->GetOuttaRadius() }, 
+		{ m_fleeTarget.x +  obj->GetOuttaRadius(),m_fleeTarget.y + obj->GetOuttaRadius() });//The integer distance is of the position and the fleeing target
 	if (distance > m_radiusOfTar)//If the distance is larger than the radius, the velocity will decrease and the lamder function will occur
 	{
-		-obj->GetVelocity().x, -obj->GetVelocity().y;//Lessens the velocity over time.
+		//-obj->GetVelocity().x, -obj->GetVelocity().y;//Lessens the velocity over time.
 		if (m_outOfRangeFunc)
 			m_outOfRangeFunc;
 	}
@@ -29,15 +30,16 @@ void FleeBehaviour::Update(GameObject* obj, float deltaTime)
 		Vector2 steeringForce = Vector2Subtract(desiredVelocity, obj->GetVelocity());//The movement that it makes to go.
 		obj->ApplyForce(steeringForce);
 	}
-		
-
-
 }
 
 void FleeBehaviour::Draw(GameObject* obj)
 {
-	DrawCircle(m_fleeTarget.x, m_fleeTarget.y, m_radiusOfTar, GRAY);//Creates a larger outter circle from the target spot
-	DrawCircle(m_fleeTarget.x, m_fleeTarget.y, 5, PINK);//Creates a small outta circle from the target spot
+	if (IsKeyPressed(KEY_TAB))
+	{
+		DrawCircle(m_fleeTarget.x, m_fleeTarget.y, m_radiusOfTar, GRAY);//Creates a larger outter circle from the target spot
+		DrawCircle(m_fleeTarget.x, m_fleeTarget.y, 5, PINK);//Creates a small outta circle from the target spot
+	}
+
 }
 
 const Vector2& FleeBehaviour::GetTarget() const
@@ -51,12 +53,12 @@ void FleeBehaviour::SetTarget(const Vector2& target)
 	m_fleeTarget = target;
 }
 
-const float FleeBehaviour::GetTargetRadius() const
+const float& FleeBehaviour::GetTargetRadius() const
 {
 	return m_radiusOfTar;
 }
 
-void FleeBehaviour::SetTargetRadius(const float targetRad)
+void FleeBehaviour::SetTargetRadius(const float& targetRad)
 {
 	m_radiusOfTar = targetRad;
 }

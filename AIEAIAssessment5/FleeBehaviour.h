@@ -16,9 +16,9 @@ public:
 
 	void SetTarget(const Vector2& target);
 
-	const float GetTargetRadius() const;
+	const float& GetTargetRadius() const;
 
-	void SetTargetRadius(const float targetRad);
+	void SetTargetRadius(const float& targetRad);
 
 	void OutOfRange(std::function <void()> callback);
 

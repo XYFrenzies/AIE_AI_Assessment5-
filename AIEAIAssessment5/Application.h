@@ -28,7 +28,7 @@ public:
 	Vector2 GetMousePosWorld();//Gets the position of the mouse within the world
 	Graph2D* GetGraph();//Gets the graph information from a point in memory
 	Player* GetPlayer();//Gets the players information from a point in memory
-	MoneyBags* GetMoney();//Gets the moneys information from a point in memory
+	Item* GetItem();//Gets the moneys information from a point in memory
 	Police* GetPolice();//Gets the enemy's information from a point in memory
 	void SmoothCameraFollow(Vector2 targetPos, float dt);//This is the physics behind the smooth flow of the camera.
 protected:
@@ -44,7 +44,7 @@ protected:
 
 	Player* m_robber = nullptr;//This is the instance of the player called robber
 	Police* m_police = nullptr;//This is the instance of the enemy called police
-	MoneyBags* m_money = nullptr;//Money is the variable that spawns in random locations, its set to nullptr
+	Item* m_item = nullptr;//Money is the variable that spawns in random locations, its set to nullptr
 
 	Graph2D* m_graph = nullptr;//This is the graph that uses functions within the 2D graph
 	Graph2DEditor* m_graphEditor = nullptr;//This is the editing graph.

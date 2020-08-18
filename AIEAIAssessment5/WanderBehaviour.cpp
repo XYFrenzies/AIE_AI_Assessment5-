@@ -39,12 +39,12 @@ void WanderBehaviour::Update(GameObject* obj, float deltaTime)
 				obj->SetVelocity(constVel);
 
 			float degreesTheta = atan2(obj->GetVelocity().x, obj->GetVelocity().y);//returns the tangent of the x and y value of the arc.
-			degreesTheta *= 57.3248;//This is 180 / Pi to find the theta value around the circle converting it from radians to degrees
+			degreesTheta *= 57.3248f;//This is 180 / Pi to find the theta value around the circle converting it from radians to degrees
 
 			float radius = obj->GetMaxSpeed();//  Vector2Distance({ 0, 0 }, obj->GetVelocity());// Its the distance from the point 0,0 and the velocity of the object
 
 			float radiansTheta = (degreesTheta - m_changeinDegrees) + rand() % (2 * m_changeinDegrees);
-			radiansTheta *= 0.017444;
+			radiansTheta *= 0.017444f;
 			Vector2 changedVel;
 			changedVel.x = radius * sinf(radiansTheta);
 			changedVel.y = radius * cosf(radiansTheta);

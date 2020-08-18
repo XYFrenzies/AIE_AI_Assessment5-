@@ -43,8 +43,8 @@ void Application::Update(float dt)
 	auto obstacles = m_tile->GetTileLayer("Obstacles");//The trees and terrain of the map
 
 
-	if (IsKeyDown(KEY_UP) && m_camera.zoom >= 0.5) m_camera.zoom -= 1 * dt;
-	if (IsKeyDown(KEY_DOWN) && m_camera.zoom <= 10) m_camera.zoom += 1 * dt;
+	if (IsKeyDown(KEY_UP) && m_camera.zoom >= 0.5) m_camera.zoom -= 1 * dt;//When the player presses the up key, it zooms in
+	if (IsKeyDown(KEY_DOWN) && m_camera.zoom <= 10) m_camera.zoom += 1 * dt;//When the player presses the down keu, it zooms out.
 
 	if (IsKeyDown(KEY_TAB))
 	{
@@ -53,17 +53,25 @@ void Application::Update(float dt)
 
 	m_robber->Update(dt);//Updates player1 per deltatime
 	m_police->Update(dt);
-	m_money->Update(dt);
+	m_item->Update(dt);
 
-	int playerXIndex = m_robber->GetPosition().x / m_tile->tileWidth;
-	int playerYIndex = m_robber->GetPosition().y / m_tile->tileHeight;
-	auto cptbar = barrier->GetTileData(playerXIndex, playerYIndex);
-	auto cptobst = obstacles->GetTileData(playerXIndex, playerYIndex);
+	int playerXIndex = m_robber->GetPosition().x / m_tile->tileWidth;//Gets the position of the robber of the x
+	int playerYIndex = m_robber->GetPosition().y / m_tile->tileHeight;//Gets the position of the robber of the y
+	auto cptbar = barrier->GetTileData(playerXIndex, playerYIndex);//compares the location data of the player to the tile.
+	auto cptobst = obstacles->GetTileData(playerXIndex, playerYIndex);//compares the location data of the player to the tile.
+	int policeXIndex = m_police->GetPosition().x / m_tile->tileWidth;
+	int policeYIndex = m_police->GetPosition().y / m_tile->tileHeight;
+	auto cptbarpol = barrier->GetTileData(policeXIndex, policeYIndex);
+	auto cptobstpol = obstacles->GetTileData(policeXIndex, policeYIndex);
 	if (cptobst.globalTileId != 0)
-		m_robber->SetFriction(3);
+		m_robber->SetFriction(2);
 	else
 		m_robber->SetFriction(0);
-
+	if (cptobstpol.globalTileId != 0)
+		m_robber->SetFriction(2);
+	else
+		m_robber->SetFriction(0);
+	//If the robber is interacting with a wall
 	if (cptbar.globalTileId != 0)
 	{
 		Vector2 newVel;
@@ -74,21 +82,28 @@ void Application::Update(float dt)
 		newVel = Vector2Scale(newVel, m_robber->GetMaxSpeed());
 		m_robber->SetVelocity(newVel);
 	}
-	//if (m_robber1->GetPosition().x == m_money->GetPosition().x && m_robber1->GetPosition().y == m_money->GetPosition().y)
-	//{
-	//	//moneyStorage.pop_back();
-	//}
-	SmoothCameraFollow(m_robber->GetPosition(), dt);
+	//If the police is interaccting with a wall.
+	if (cptbarpol.globalTileId != 0)
+	{
+		Vector2 newVel;
+		newVel.x = GetScreenWidth() * 0.5f - m_police->GetPosition().x;//Sets the direction that the player is facing, towards the center via the x
+		newVel.y = GetScreenHeight() * 0.5f - m_police->GetPosition().y;//Sets the direction that the player is facing, towards the center via the y
+
+		newVel = Vector2Normalize(newVel);//
+		newVel = Vector2Scale(newVel, m_police->GetMaxSpeed());
+		m_police->SetVelocity(newVel);
+	}
+	SmoothCameraFollow(m_robber->GetPosition(), dt);//Calls the functiuon to create a smooth movement for the camera
 
 }
 
 void Application::Draw()
 {
-	auto layer = m_tile->GetTileLayer("ground");
-	auto treeLayer = m_tile->GetTileLayer("Obstacles");
+	auto layer = m_tile->GetTileLayer("ground");//The ground of the map
+	auto treeLayer = m_tile->GetTileLayer("Obstacles");//The obstacles of the map
 	auto barrier = m_tile->GetTileLayer("Barrier");//The barrier of the map
-	int moneyXIndex = m_money->GetPosition().x / m_tile->tileWidth;
-	int moneyYIndey = m_money->GetPosition().y / m_tile->tileHeight;
+	int moneyXIndex = m_item->GetPosition().x / m_tile->tileWidth;
+	int moneyYIndey = m_item->GetPosition().y / m_tile->tileHeight;
 	auto& tileData = layer->GetTileData(moneyXIndex, moneyYIndey);
 	auto& obsticleTileData = treeLayer->GetTileData(moneyXIndex, moneyYIndey);
 	auto& cptbar = barrier->GetTileData(moneyXIndex, moneyYIndey);
@@ -117,35 +132,35 @@ void Application::Draw()
 				m_graphEditor->Draw();
 			}
 
-			m_money->Draw();
+			m_item->Draw();
 			m_police->Draw();
 		}
 	}
 	//Checks if the money has been collected.
-	if (m_money->moneyTaken == true)
+	if (m_item->moneyTaken == true)
 	{
 		count += 1;
-		m_money->moneyTaken = false;
+		m_item->moneyTaken = false;
 	}
 
 
 
 	EndMode2D();
-	DrawText(FormatText("Score: %i", count), 10, 10, 24, RAYWHITE);
+	DrawText(FormatText("Score: %i", count), 10, 10, 24, RAYWHITE);//Creates the text for the score.
 	EndDrawing();
 }
 
 void Application::Load()
 {
-	m_graph = new Graph2D();
-	m_graphEditor = new Graph2DEditor(this);
+	m_graph = new Graph2D();//Creates a new map
+	m_graphEditor = new Graph2DEditor(this);//A new instance of the editor
 
 	//Creates a variable called Keyboard1 from the keyboardbehaviour class for the first player
 	auto KeyBoard1 = new KeyBoardBehaviour();
 
-	m_tile = new TileMap();
-	m_tile->Load("./assets/map.tmx");
-	m_tile->SetRenderer(new TileMapRenderer());
+	m_tile = new TileMap();//creates a new tilemap
+	m_tile->Load("./assets/newGameMap.tmx");//This is to load the map
+	m_tile->SetRenderer(new TileMapRenderer());//Renders the map
 
 
 	m_graphEditor->SetNewNodeRadius(m_tile->tileWidth + 5);
@@ -157,7 +172,7 @@ void Application::Load()
 	m_robber->SetFriction(0.5f);	//Calling upon the friction of the player
 	m_robber->SetPosition({ m_screenWidth * 0.25f, m_screenHeight * 0.25f });//Sets the position of the player
 	m_robber->SetEditor(m_graphEditor);
-	m_robber->SetMoney(m_money);
+	m_robber->SetMoney(m_item);
 
 	//_________________________________________________________________________________________________________
 	m_police = new Police(this);
@@ -165,28 +180,29 @@ void Application::Load()
 	m_police->SetPosition({ m_screenWidth * 0.75f, m_screenHeight * 0.75f });//Sets the position of the player
 	m_police->SetPlayer(m_robber);
 
-	m_money = new MoneyBags(this);
-	m_money->SetPlayer(m_robber);
+	m_item = new Item(this);
+	m_item->SetPlayer(m_robber);
 
-
-	for (int y = 0; y < m_tile->rows; y++)
+	//This is to add the nodes and to hold the item positions that are not considered a obstacle
+	for (unsigned int y = 0; y < m_tile->rows; y++)
 	{
-		for (int x = 0; x < m_tile->cols; x++)
+		for (unsigned int x = 0; x < m_tile->cols; x++)
 		{
-			auto layer = m_tile->GetTileLayer("ground");
-			auto treeLayer = m_tile->GetTileLayer("Obstacles");
+			auto layer = m_tile->GetTileLayer("ground");//ground layer.
+			auto treeLayer = m_tile->GetTileLayer("Obstacles");//obstacles layer.
 
-			auto& tileData = layer->GetTileData(x, y);
-			auto& obsticleTileData = treeLayer->GetTileData(x, y);
+			auto& tileData = layer->GetTileData(x, y);//The data's x and y is copied
+			auto& obsticleTileData = treeLayer->GetTileData(x, y);//The data's x and y is copied
 			if (tileData.globalTileId != 0)
 			{
 				if (obsticleTileData.globalTileId == 0)
-				{
+				{//Adds the node as per the x and y position and in relation to the tile locations
 					m_graph->AddNode({
 					x * (float)m_tile->tileWidth + (m_tile->tileWidth * 0.5f),
 					y * (float)m_tile->tileHeight + (m_tile->tileHeight * 0.5f)
 						});
-					m_money->HoldMoneyBags(
+					//Adds a holding location for the item.
+					m_item->HoldItemPos(
 						x * (float)m_tile->tileWidth + (m_tile->tileWidth * 0.5f),
 						y * (float)m_tile->tileHeight + (m_tile->tileHeight * 0.5f)
 					);
@@ -195,6 +211,7 @@ void Application::Load()
 
 		}
 	}
+	//Gets the nodes that have been added
 	for (auto& node : m_graph->GetNodes())
 	{
 		float radiusNode = m_tile->tileWidth + 5;
@@ -211,10 +228,10 @@ void Application::Load()
 			m_graph->AddEdge(conNode, node, dist);
 		}
 	}
-
+	//Sets the graph of the editor to the m_graph2D.
 	m_graphEditor->SetGraph(m_graph);
 
-
+	//The camera is set to the robbers location and can be rotated and zommed in and out.
 	m_camera.target = { m_robber->GetPosition().x + 20.0f, m_robber->GetPosition().y + 20.0f };
 	m_camera.offset = { m_screenWidth / 2.0f, m_screenHeight / 2.0f };
 	m_camera.rotation = 0.0f;
@@ -238,8 +255,8 @@ void Application::Unload()
 	delete m_tile;
 	m_tile = nullptr;
 
-	delete m_money;
-	m_money = nullptr;
+	delete m_item;
+	m_item = nullptr;
 
 
 }
@@ -283,9 +300,9 @@ Player* Application::GetPlayer()
 {
 	return m_robber;
 }
-MoneyBags* Application::GetMoney()
+Item* Application::GetItem()
 {
-	return m_money;
+	return m_item;
 }
 Police* Application::GetPolice()
 {

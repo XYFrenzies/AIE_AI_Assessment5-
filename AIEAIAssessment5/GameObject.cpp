@@ -10,6 +10,12 @@ GameObject::~GameObject()
 	delete m_behaviour;
 	m_behaviour = nullptr;
 	delete GetBehaviour();
+
+	for (auto node : m_nearbyNodes)
+	{
+		delete node;
+	}
+	m_nearbyNodes.clear();
 }
 
 void GameObject::Update(float deltaTime)
