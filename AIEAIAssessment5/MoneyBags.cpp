@@ -40,12 +40,12 @@ void Item::Draw()
 }
 void Item::Update(float deltaTime)
 {
-	int randI = GetRandomValue(0, 620);
+	int randI = GetRandomValue(0, 619);
 	m_app->GetPlayer();//Gets the player information
 	m_time += deltaTime;//Increases time by delta time
 	if (!moneyStorage.empty() && m_time > 5)//If there is nothing in the storage and/or the time is greater than a default time.
 	{
-		drawnStorage.push_back(moneyStorage.at(randI));
+		drawnStorage.push_back(moneyStorage.at(randI));//Adds the location from the moneyStorage to the drawnStorage through the randomIndex
 		m_time = 0;
 	}
 	for (int i = 0; i < drawnStorage.size(); i++)//loops through the vector of coins.

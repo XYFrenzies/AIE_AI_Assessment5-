@@ -40,7 +40,7 @@ void PathFindingBehaviour::Update(GameObject* obj, float deltaTime)
 			m_onArriveFunc();
 	}
 }
-
+//Creates all the nodes when the player presses tab.
 void PathFindingBehaviour::Draw(GameObject* obj)
 {
 	if (IsKeyDown(KEY_TAB))
@@ -52,10 +52,6 @@ void PathFindingBehaviour::Draw(GameObject* obj)
 			DrawLineEx(p1, p2, 5, BLACK);
 		}
 	}
-
-
-
-
 }
 
 const Vector2& PathFindingBehaviour::GetTarget() const

@@ -92,32 +92,33 @@ void Player::Update(float deltaTime)
 			SetBehaviour(m_pFBehaviour);
 		}
 	}
-	//if (m_app->GetPolice() != nullptr)
-	//{
-	//	if (m_app->GetPolice()->GetPosition().x + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
-	//		&& m_app->GetPolice()->GetPosition().x < GetPosition().x + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius()
-	//		&& m_app->GetPolice()->GetPosition().y + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
-	//		&& m_app->GetPolice()->GetPosition().y < GetPosition().y + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius())
-	//	{
-	//		m_fleeBehaviour->SetTarget(m_app->GetPolice()->GetPosition());
-	//		m_fleeBehaviour->SetTargetRadius(m_app->GetPolice()->GetOuttaRadius());
-	//		if (m_behaviour == m_pFBehaviour)
-	//		{
-	//			SetBehaviour(m_fleeBehaviour);
-	//			m_fleeBehaviour->OutOfRange([this]() {
-	//				SetBehaviour(m_pFBehaviour);
-	//				});
-	//		}
-	//		else if (m_behaviour == m_wanderBehaviour)
-	//		{
-	//			SetBehaviour(m_fleeBehaviour);
-	//			m_fleeBehaviour->OutOfRange([this]() {
-	//				SetBehaviour(m_wanderBehaviour);
-	//				});
-	//		}
-	//	}
+	//This is for if the police is within the range of the player
+	if (m_app->GetPolice() != nullptr)
+	{	//If the police is within the radius of the player
+		if (m_app->GetPolice()->GetPosition().x + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
+			&& m_app->GetPolice()->GetPosition().x < GetPosition().x + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius()
+			&& m_app->GetPolice()->GetPosition().y + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
+			&& m_app->GetPolice()->GetPosition().y < GetPosition().y + m_app->GetPolice()->GetOuttaRadius() + GetOuttaRadius())
+		{
+			m_fleeBehaviour->SetTarget(m_app->GetPolice()->GetPosition());//Set to flee behaviour
+			m_fleeBehaviour->SetTargetRadius(m_app->GetPolice()->GetOuttaRadius());//Set the target radius to the police outta radius
+			if (m_behaviour == m_pFBehaviour)//If its pathfinding, later set it to pathfinding when its out of range
+			{
+				SetBehaviour(m_fleeBehaviour);
+				m_fleeBehaviour->OutOfRange([this]() {
+					SetBehaviour(m_pFBehaviour);
+					});
+			}
+			else if (m_behaviour == m_wanderBehaviour)//If its wander, later set it to wander when its out of range
+			{
+				SetBehaviour(m_fleeBehaviour);
+				m_fleeBehaviour->OutOfRange([this]() {
+					SetBehaviour(m_wanderBehaviour);
+					});
+			}
+		}
 
-	//}
+	}
 
 	GameObject::Update(deltaTime);
 }

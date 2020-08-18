@@ -111,14 +111,17 @@ void GameObject::SetFriction(const float& fric)
 {
 	m_fric = fric;
 }
+//Sets the max speed
 void GameObject::SetMaxSpeed(const float& speed)
 {
 	m_maxSpeed = speed;
 }
+//Sets the inner radius
 void GameObject::SetInnerRadius(const float& inRad)
 {
 	m_innerRadius = inRad;
 }
+//Sets the outta radius
 void GameObject::SetOuttaRadius(const float& outRad)
 {
 	m_outtaRadius = outRad;

@@ -24,10 +24,10 @@ public:
 
 protected:
 
-	Vector2 m_fleeTarget;
-	float m_radiusOfTar = 1.0f;
+	Vector2 m_fleeTarget;//The target to flee away from
+	float m_radiusOfTar = 1.0f;//The targets radius by default
 
-	std::function<void()> m_outOfRangeFunc;
+	std::function<void()> m_outOfRangeFunc;//Out of range lambda function
 
 private:
 
