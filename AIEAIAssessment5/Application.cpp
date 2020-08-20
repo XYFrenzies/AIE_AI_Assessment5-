@@ -19,7 +19,7 @@ void Application::Startup()
 {
 	m_screenWidth = 1080;//Setting value of width of screen
 	m_screenHeight = 720;//Setting value of height of screen
-	InitWindow(m_screenWidth, m_screenHeight, "Hello World");
+	InitWindow(m_screenWidth, m_screenHeight, "Cops and Robbers");
 	SetTargetFPS(60);
 }
 
@@ -260,7 +260,7 @@ void Application::Unload()
 
 
 }
-
+//This allows for the camera to move at a rate in which when the player moves, the camera moves.
 void Application::SmoothCameraFollow(Vector2 targetPos, float dt)
 {
 	static float minSpeed = 30;
@@ -291,20 +291,20 @@ Vector2 Application::GetMousePosWorld()
 	return GetScreenToWorld2D(mpos, m_camera);
 }
 
-Graph2D* Application::GetGraph()
+Graph2D* Application::GetGraph()//Gets the graph
 {
 	return m_graph;
 }
 
-Player* Application::GetPlayer()
+Player* Application::GetPlayer()//Gets the values of player
 {
 	return m_robber;
 }
-Item* Application::GetItem()
+Item* Application::GetItem()//Gets the items
 {
 	return m_item;
 }
-Police* Application::GetPolice()
+Police* Application::GetPolice()//Gets the police
 {
 	return m_police;
 }

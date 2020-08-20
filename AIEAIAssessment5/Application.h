@@ -31,6 +31,7 @@ public:
 	Item* GetItem();//Gets the moneys information from a point in memory
 	Police* GetPolice();//Gets the enemy's information from a point in memory
 	void SmoothCameraFollow(Vector2 targetPos, float dt);//This is the physics behind the smooth flow of the camera.
+
 protected:
 	//Gets screenwidth and height of the screen
 	int m_screenWidth;

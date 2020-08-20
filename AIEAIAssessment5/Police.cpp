@@ -36,10 +36,10 @@ Police::~Police()
 void Police::Update(float deltaTime)
 {
 	//This is a check for if the player is within the radius of the police.
-	if (m_player->GetPosition().x + m_player->GetOuttaRadius() + GetInnerRadius() > GetPosition().x
-		&& m_player->GetPosition().x < GetPosition().x + m_player->GetOuttaRadius() + GetInnerRadius()
-		&& m_player->GetPosition().y + m_player->GetOuttaRadius() + GetInnerRadius() > GetPosition().y
-		&& m_player->GetPosition().y < GetPosition().y + m_player->GetOuttaRadius() + GetInnerRadius())
+	if (m_player->GetPosition().x + m_player->GetOuttaRadius() + GetOuttaRadius() > GetPosition().x
+		&& m_player->GetPosition().x < GetPosition().x + m_player->GetOuttaRadius() + GetOuttaRadius()
+		&& m_player->GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius() > GetPosition().y
+		&& m_player->GetPosition().y < GetPosition().y + m_player->GetOuttaRadius() + GetOuttaRadius())
 	{
 		//Set behaviour to pathfind
 		SetBehaviour(m_pFBehaviour);

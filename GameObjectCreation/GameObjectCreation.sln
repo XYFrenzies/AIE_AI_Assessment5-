@@ -13,10 +13,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphs_and_FollowPath", "..
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIEAIAssessment5", "..\AIEAIAssessment5\AIEAIAssessment5.vcxproj", "{0689D7A7-EDD4-439A-8DAD-181BD022648F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{5410FC57-321E-43D5-837C-7A47033041B8} = {5410FC57-321E-43D5-837C-7A47033041B8}
 		{C02DC180-F51F-4427-BAA7-96DDB967A1B0} = {C02DC180-F51F-4427-BAA7-96DDB967A1B0}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TiledTmxParser", "TiledTmxParser\TiledTmxParser.vcxproj", "{C02DC180-F51F-4427-BAA7-96DDB967A1B0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RayGUI_Widgets", "RayGUI_Widgets\RayGUI_Widgets.vcxproj", "{5410FC57-321E-43D5-837C-7A47033041B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +61,14 @@ Global
 		{C02DC180-F51F-4427-BAA7-96DDB967A1B0}.Release|x64.Build.0 = Release|x64
 		{C02DC180-F51F-4427-BAA7-96DDB967A1B0}.Release|x86.ActiveCfg = Release|Win32
 		{C02DC180-F51F-4427-BAA7-96DDB967A1B0}.Release|x86.Build.0 = Release|Win32
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Debug|x64.ActiveCfg = Debug|x64
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Debug|x64.Build.0 = Debug|x64
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Debug|x86.ActiveCfg = Debug|Win32
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Debug|x86.Build.0 = Debug|Win32
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Release|x64.ActiveCfg = Release|x64
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Release|x64.Build.0 = Release|x64
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Release|x86.ActiveCfg = Release|Win32
+		{5410FC57-321E-43D5-837C-7A47033041B8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

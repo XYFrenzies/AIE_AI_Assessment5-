@@ -16,7 +16,7 @@ Player::Player(Application* app) : GameObject()
 	m_fleeBehaviour = new FleeBehaviour();//Creates an instance in memory of the flee behaviour 
 	m_wanderBehaviour = new WanderBehaviour();//Creates an instance in memory of the wander behaviour 
 	m_pFBehaviour = new PathFindingBehaviour();//Creates an instance in memory of the pathfind behaviour 
-	m_fleeBehaviour->SetTargetRadius(10);//Sets the radius of the circle
+	m_fleeBehaviour->SetTargetRadius(5);//Sets the radius of the circle
 	m_wanderBehaviour->SetRadius(100);//Sets the radius of the circle
 	m_wanderBehaviour->SetDistance(10);//Sets distance of agent from the circle.
 	m_pFBehaviour->SetTargetRadius(m_innerRadius);
@@ -53,14 +53,12 @@ void Player::Update(float deltaTime)
 		SetBehaviour(m_wanderBehaviour);//Returns back to the keyboard behaviour when the player presses "r"
 		m_isKBBehaviour = false;
 	}
-
-
 	//If the moneybag has spawned on the map.
 	if (((m_behaviour == m_wanderBehaviour && !m_app->GetItem()->drawnStorage.empty())
-		|| (m_behaviour == m_pFBehaviour && m_fleedPrev == true) ||
+		|| (m_behaviour == m_pFBehaviour) ||
 		(!m_app->GetItem()->drawnStorage.empty() && m_behaviour != m_pFBehaviour)) && m_isKBBehaviour == false)
 	{
-		m_fleedPrev = false;
+		//m_fleedPrev = false;
 		//This is for the nearby nodes around the player
 		std::vector<Graph2D::Node*> closeNodesRob;
 		m_app->GetGraph()->GetNearbyNodes(GetPosition(), GetInnerRadius(), closeNodesRob);

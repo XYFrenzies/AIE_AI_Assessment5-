@@ -16,11 +16,19 @@ void FleeBehaviour::Update(GameObject* obj, float deltaTime)
 	Vector2 vecOfDestPos = Vector2Subtract(obj->GetPosition(), m_fleeTarget);//Gets the vector distance of the objects position to the fleeing target location
 	float distance = Vector2Distance({ obj->GetPosition().x + obj->GetOuttaRadius(), obj->GetPosition().y + obj->GetOuttaRadius() }, 
 		{ m_fleeTarget.x +  obj->GetOuttaRadius(),m_fleeTarget.y + obj->GetOuttaRadius() });//The integer distance is of the position and the fleeing target
-	if (distance > m_radiusOfTar)//If the distance is larger than the radius, the velocity will decrease and the lamder function will occur
+
+	if (m_fleeTarget.x + m_radiusOfTar + obj->GetInnerRadius() < obj->GetPosition().x
+		&& m_fleeTarget.x > obj->GetPosition().x + m_radiusOfTar + obj->GetInnerRadius()
+		&& m_fleeTarget.y + m_radiusOfTar + obj->GetInnerRadius() < obj->GetPosition().y
+		&& m_fleeTarget.y > obj->GetPosition().y + m_radiusOfTar + obj->GetInnerRadius())
 	{
-		//-obj->GetVelocity().x, -obj->GetVelocity().y;//Lessens the velocity over time.
-		if (m_outOfRangeFunc)
-			m_outOfRangeFunc;
+		//if (distance > m_radiusOfTar)//If the distance is larger than the radius, the velocity will decrease and the lamder function will occur
+		//{
+			//-obj->GetVelocity().x, -obj->GetVelocity().y;//Lessens the velocity over time.
+			if (m_outOfRangeFunc)
+				m_outOfRangeFunc;
+		//}
+
 	}
 	else
 	{
@@ -30,6 +38,7 @@ void FleeBehaviour::Update(GameObject* obj, float deltaTime)
 		Vector2 steeringForce = Vector2Subtract(desiredVelocity, obj->GetVelocity());//The movement that it makes to go.
 		obj->ApplyForce(steeringForce);
 	}
+
 }
 
 void FleeBehaviour::Draw(GameObject* obj)

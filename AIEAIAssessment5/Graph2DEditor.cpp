@@ -15,67 +15,6 @@ Graph2DEditor::~Graph2DEditor()
 
 void Graph2DEditor::Update(float deltaTime)
 {
-	if (IsMouseButtonPressed(1))
-	{
-
-		auto mousePos = m_app->GetMousePosWorld();
-
-		// get the first node that we click on.
-		std::vector<Graph2D::Node*> neibouringNodes;
-		m_graph->GetNearbyNodes(mousePos, 8, neibouringNodes);
-		if (neibouringNodes.empty() == false)
-		{
-			if (m_startNode == nullptr)
-				m_startNode = neibouringNodes[0];
-			else if (m_endNode == nullptr)
-				m_endNode = neibouringNodes[0];
-			else { m_startNode = neibouringNodes[0]; m_endNode = nullptr; }
-			// Begin Search
-			// call the FindPath method
-			if (m_endNode != nullptr)
-			{
-				auto isGoalNode = [this](Graph2D::Node* node) {
-					return node == m_endNode;
-				};
-
-				std::list<Graph2D::Node*> path; // stores the path
-				if (m_graph->PathFinder(m_startNode, isGoalNode, path))
-				{
-					m_path.clear();
-					for (auto nodePath : path)
-					{
-						m_path.push_back(nodePath->data);
-					}
-
-				}
-			}
-		}
-	}
-
-
-	if (IsMouseButtonPressed(0))
-	{
-		auto mousePos = m_app->GetMousePosWorld();
-
-		std::vector<Graph2D::Node*> nearNodes;
-		m_graph->GetNearbyNodes(mousePos, radiusNode, nearNodes);
-		for (auto nearbyNodes : nearNodes)
-		{
-			float dist = Vector2Distance(mousePos, nearbyNodes->data);
-			if (dist < radDist)
-				return;
-		}
-		auto newNode = m_graph->AddNode(mousePos);
-
-
-		for (auto& nearbyNodes : nearNodes)
-		{
-			float dist = Vector2Distance(newNode->data, nearbyNodes->data);
-			m_graph->AddEdge(newNode, nearbyNodes, dist);
-			m_graph->AddEdge(nearbyNodes, newNode, dist);
-		}
-
-	}
 }
 
 void Graph2DEditor::Draw()
@@ -104,13 +43,7 @@ void Graph2DEditor::Draw()
 		DrawCircle(m_endNode->data.x, m_endNode->data.y, 4, GREEN);
 	}
 	
-
-
-
-	//Draws a "Preview" node where the mouse is
-	auto mousePos = m_app->GetMousePosWorld();
-	DrawCircle(mousePos.x, mousePos.y, 6, LIGHTGRAY);
-
+	//Draws line of the line
 	if (!m_path.empty())
 	{
 		for (int i = 0; i < m_path.size() - 1; i++)
@@ -119,17 +52,6 @@ void Graph2DEditor::Draw()
 		}
 
 	}
-
-
-	//Draws all the links to the nearby nodes.
-	std::vector<Graph2D::Node*> nearNodes;
-	m_graph->GetNearbyNodes(mousePos, radiusNode, nearNodes);
-
-	for (auto& nearbyNodes : nearNodes)
-	{
-		DrawLine(mousePos.x, mousePos.y, nearbyNodes->data.x, nearbyNodes->data.y, LIGHTGRAY);
-	}
-
 }
 
 void Graph2DEditor::SetNewNodeRadius(float r)

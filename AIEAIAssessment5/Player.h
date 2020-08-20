@@ -27,7 +27,7 @@ public:
 		m_item = items;
 	}
 
-
+	bool isCaught = false; //Checks if the player is caught
 protected:
 	KeyBoardBehaviour* m_kbBehaviour;//Keyboard behaviuour
 	FleeBehaviour* m_fleeBehaviour;//flee behaviuour
@@ -43,6 +43,8 @@ protected:
 
 	bool m_fleedPrev = false;//Checks if the player is fleeing
 	bool m_isKBBehaviour = false;//Checks if the player is in keyboard.
+
+
 
 private:
 };
