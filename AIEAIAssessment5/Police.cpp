@@ -94,13 +94,26 @@ void Police::Draw()
 	//If seen, the police with produce red and blue lights.
 	if (m_isSeen == true)
 	{
-		if (m_time <= 0.5)
-			DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 255, 0, 0, 100 });
 
-		else if (m_time > 0.5 && m_time <= 1)
-			DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 0, 0, 255, 100 });
-		else
-			m_time = 0;
+		//Red
+		DrawCircleSector({ m_pos.x, m_pos.y }, m_outtaRadius, redRadiusI, redRadiusE, 1, { 255, 0, 0, 100 });
+
+		//Blue
+		DrawCircleSector({ m_pos.x, m_pos.y }, m_outtaRadius, blueRadiusI, blueRadiusE, 1, { 0, 0, 255, 100 });
+
+		//Increase the Initial and the end parts of the moving sector circles so that it is rotating like a cop.
+		redRadiusI += 5.00f;
+		redRadiusE += 5.00f;
+		blueRadiusI += 5.00f;
+		blueRadiusE += 5.00f;
+
+		//if (m_time <= 0.5)
+		//	DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 255, 0, 0, 100 });
+
+		//else if (m_time > 0.5 && m_time <= 1)
+		//	DrawCircle(m_pos.x, m_pos.y, m_outtaRadius, { 0, 0, 255, 100 });
+		//else
+		//	m_time = 0;
 	}
 	GameObject::Draw();
 }

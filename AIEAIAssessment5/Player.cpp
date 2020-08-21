@@ -55,10 +55,10 @@ void Player::Update(float deltaTime)
 	}
 	//If the moneybag has spawned on the map.
 	if (((m_behaviour == m_wanderBehaviour && !m_app->GetItem()->drawnStorage.empty())
-		|| (m_behaviour == m_pFBehaviour) ||
+		|| (m_behaviour == m_pFBehaviour && m_fleedPrev == true) ||
 		(!m_app->GetItem()->drawnStorage.empty() && m_behaviour != m_pFBehaviour)) && m_isKBBehaviour == false)
 	{
-		//m_fleedPrev = false;
+		m_fleedPrev = false;
 		//This is for the nearby nodes around the player
 		std::vector<Graph2D::Node*> closeNodesRob;
 		m_app->GetGraph()->GetNearbyNodes(GetPosition(), GetInnerRadius(), closeNodesRob);
@@ -105,6 +105,7 @@ void Player::Update(float deltaTime)
 				SetBehaviour(m_fleeBehaviour);
 				m_fleeBehaviour->OutOfRange([this]() {
 					SetBehaviour(m_pFBehaviour);
+					m_fleedPrev = true;
 					});
 			}
 			else if (m_behaviour == m_wanderBehaviour)//If its wander, later set it to wander when its out of range
@@ -112,6 +113,7 @@ void Player::Update(float deltaTime)
 				SetBehaviour(m_fleeBehaviour);
 				m_fleeBehaviour->OutOfRange([this]() {
 					SetBehaviour(m_wanderBehaviour);
+					m_fleedPrev = true;
 					});
 			}
 		}

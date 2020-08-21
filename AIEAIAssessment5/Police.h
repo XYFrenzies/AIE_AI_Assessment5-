@@ -39,7 +39,11 @@ protected:
 
 	bool m_isSeen = false;
 
+	float redRadiusI = 0.0f;
+	float redRadiusE = 90.0f;
 
+	float blueRadiusI = 180.0f;
+	float blueRadiusE = 270.0f;
 
 
 private:
